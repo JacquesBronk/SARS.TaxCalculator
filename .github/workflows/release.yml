@@ -123,7 +123,8 @@ jobs:
         fi
         
         if [[ -z "$RELEASE_NOTES" ]]; then
-          RELEASE_NOTES="## Release $VERSION
+          RELEASE_NOTES=$(cat <<EOF
+## Release $VERSION
 
 ### Changes
 - Updated to version $VERSION
@@ -137,7 +138,9 @@ dotnet add package SARS.TaxCalculator --version $VERSION
 \`\`\`
 
 ### Verification
-All calculations have been verified against official SARS documentation and tax tables."
+All calculations have been verified against official SARS documentation and tax tables.
+EOF
+)
         fi
         
         # Save to file for the release step
