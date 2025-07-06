@@ -84,7 +84,7 @@ public class EtiCalculator
     {
         if (employees == null)
             throw new ArgumentNullException(nameof(employees));
-        
+
         var employeeList = employees.ToList();
         var results = employeeList.Select(CalculateMonthly).ToList();
 
@@ -164,7 +164,7 @@ public class EtiCalculator
         {
             // Validate hours worked (max 744 hours = 31 days * 24 hours)
             var hoursWorked = Math.Min(employee.HoursWorkedInMonth.Value, 744m);
-            
+
             if (hoursWorked < 160)
             {
                 baseAmount = baseAmount * (hoursWorked / 160m);

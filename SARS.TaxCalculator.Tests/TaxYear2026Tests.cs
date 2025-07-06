@@ -94,11 +94,11 @@ public class TaxYear2026Tests
         // Age limits remain the same
         Assert.Equal(config2025.EtiConfig.MinAge, config2026.EtiConfig.MinAge);
         Assert.Equal(config2025.EtiConfig.MaxAge, config2026.EtiConfig.MaxAge);
-        
+
         // ETI changes effective April 1, 2025 (within 2026 tax year)
         Assert.Equal(7500, config2026.EtiConfig.MaxQualifyingSalary); // Increased from 6500
         Assert.Equal(4, config2026.EtiConfig.Bands.Count);
-        
+
         // Verify new maximum ETI amounts
         var band1 = config2026.EtiConfig.Bands[0];
         Assert.Equal(2500, band1.FirstYearAmount); // Increased from 1500
