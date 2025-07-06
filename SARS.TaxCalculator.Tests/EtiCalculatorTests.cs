@@ -13,6 +13,9 @@ public class EtiCalculatorTests
 
     public EtiCalculatorTests()
     {
+        // ETI Configuration as per April 2025 changes
+        // Source: Employment Tax Incentive Act - Section 7
+        // SARS ETI Guide (LAPD-ETI-G01) - Updated April 2025
         var config = new EtiConfiguration
         {
             MinAge = 18,
@@ -20,21 +23,32 @@ public class EtiCalculatorTests
             MaxQualifyingSalary = 7500,
             Bands = new List<EtiBand>
             {
-                new EtiBand { MinSalary = 0, MaxSalary = 2000, FirstYearAmount = 1500, SecondYearAmount = 750 },
-                new EtiBand { MinSalary = 2001, MaxSalary = 4500, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.5m },
-                new EtiBand { MinSalary = 4501, MaxSalary = 6500, FirstYearAmount = 750, SecondYearAmount = 375, ReductionRate = 0.25m },
-                new EtiBand { MinSalary = 6501, MaxSalary = 7500, FirstYearAmount = 0, SecondYearAmount = 0 }
+                // Band 1: R0 - R2,499.99 - 60% of remuneration (capped at R2,500/R1,250)
+                new EtiBand { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250 },
+                // Band 2: R2,500 - R5,499.99 - Fixed amounts
+                new EtiBand { MinSalary = 2500, MaxSalary = 5499.99m, FirstYearAmount = 1500, SecondYearAmount = 750 },
+                // Band 3: R5,500 - R7,499.99 - Sliding scale reduction
+                new EtiBand { MinSalary = 5500, MaxSalary = 7499.99m, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.75m },
+                // Band 4: R7,500+ - No ETI
+                new EtiBand { MinSalary = 7500, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
             }
         };
         _calculator = new EtiCalculator(config);
     }
 
     [Theory]
-    [InlineData(2000, 6, 1500)] // First year, low salary
-    [InlineData(2000, 18, 750)] // Second year, low salary
-    [InlineData(3000, 6, 1000)] // First year, mid-salary with reduction
-    [InlineData(5000, 6, 625)] // First year, higher salary with reduction
-    [InlineData(7000, 6, 0)] // Above R6500, no ETI
+    [InlineData(1000, 6, 600)] // First year, low salary - 60% of R1,000 = R600
+    [InlineData(2000, 6, 1200)] // First year, low salary - 60% of R2,000 = R1,200
+    [InlineData(2499, 6, 1499)] // First year, band 1 max - 60% of R2,499 = R1,499.40 rounded
+    [InlineData(1000, 18, 300)] // Second year, low salary - 30% of R1,000 = R300
+    [InlineData(2000, 18, 600)] // Second year, low salary - 30% of R2,000 = R600
+    [InlineData(3000, 6, 1500)] // First year, band 2 - fixed R1,500
+    [InlineData(5000, 6, 1500)] // First year, band 2 - fixed R1,500
+    [InlineData(5500, 6, 1500)] // First year, band 3 start - R1,500
+    [InlineData(6000, 6, 1125)] // First year, band 3 - R1,500 - (R500 * 0.75) = R1,125
+    [InlineData(7000, 6, 375)] // First year, band 3 - R1,500 - (R1,500 * 0.75) = R375
+    [InlineData(7500, 6, 0)] // At R7,500, no ETI
+    [InlineData(8000, 6, 0)] // Above R7,500, no ETI
     public void CalculateMonthly_VariousSalariesAndMonths_ReturnsCorrectEti(
         decimal salary, int employmentMonths, decimal expectedEti)
     {
@@ -49,7 +63,10 @@ public class EtiCalculatorTests
         var result = _calculator.CalculateMonthly(employee);
 
         Assert.Equal(expectedEti, result.Amount);
-        Assert.True(result.IsEligible);
+        if (expectedEti > 0)
+        {
+            Assert.True(result.IsEligible);
+        }
     }
 
     [Theory]
@@ -123,7 +140,8 @@ public class EtiCalculatorTests
 
         var result = _calculator.CalculateMonthly(employee);
 
-        Assert.True(result.Amount > 0);
+        // Employee in band 2 gets R1,500 for first year
+        Assert.Equal(1500, result.Amount);
         Assert.True(result.IsEligible);
     }
 
@@ -142,8 +160,56 @@ public class EtiCalculatorTests
 
         Assert.Equal(4, result.TotalEmployees);
         Assert.Equal(2, result.EligibleEmployees);
-        Assert.Equal(2125m, result.TotalEtiAmount); // 1500 + 625 (truncated)
+        // First employee: 60% of R2,000 = R1,200
+        // Second employee: R1,500 (band 2)
+        // Total: R1,200 + R1,500 = R2,700
+        Assert.Equal(2700m, result.TotalEtiAmount);
         Assert.Equal(4, result.IndividualResults.Count);
+    }
+
+    [Theory]
+    [InlineData(2000, 6, 160, 1200)] // Full hours - 60% of R2,000 = R1,200
+    [InlineData(2000, 6, 80, 600)] // Half hours - 60% of R2,000 * 0.5 = R600
+    [InlineData(2000, 6, 120, 900)] // 120 hours - 60% of R2,000 * 0.75 = R900
+    [InlineData(3000, 6, 160, 1500)] // Full hours, band 2 - R1,500
+    [InlineData(3000, 6, 80, 750)] // Half hours, band 2 - R1,500 * 0.5 = R750
+    [InlineData(2000, 18, 160, 600)] // Second year, full hours - 30% of R2,000 = R600
+    [InlineData(2000, 18, 80, 300)] // Second year, half hours - 30% of R2,000 * 0.5 = R300
+    public void CalculateMonthly_WithHoursWorked_AppliesProration(
+        decimal salary, int employmentMonths, decimal hoursWorked, decimal expectedEti)
+    {
+        var employee = new EtiEmployee
+        {
+            Age = 22,
+            MonthlySalary = salary,
+            EmploymentMonths = employmentMonths,
+            IsFirstTimeEmployee = true,
+            HoursWorkedInMonth = hoursWorked
+        };
+
+        var result = _calculator.CalculateMonthly(employee);
+
+        Assert.Equal(expectedEti, result.Amount);
+        Assert.True(result.IsEligible);
+    }
+
+    [Fact]
+    public void CalculateMonthly_NoHoursSpecified_AssumesFull160Hours()
+    {
+        var employee = new EtiEmployee
+        {
+            Age = 22,
+            MonthlySalary = 2000,
+            EmploymentMonths = 6,
+            IsFirstTimeEmployee = true,
+            HoursWorkedInMonth = null // Not specified
+        };
+
+        var result = _calculator.CalculateMonthly(employee);
+
+        // Should get full ETI amount - 60% of R2,000 = R1,200
+        Assert.Equal(1200, result.Amount);
+        Assert.True(result.IsEligible);
     }
 
     [Fact]
@@ -164,23 +230,4 @@ public class EtiCalculatorTests
         Assert.Throws<ArgumentNullException>(() => new EtiCalculator(null!));
     }
 
-    [Theory]
-    [InlineData(2500, 6, 1250)] // (1500 - (500 * 0.5)) = 1250.5 truncated to 1250
-    [InlineData(3500, 6, 750)]  // (1500 - (1500 * 0.5)) = 750.5 truncated to 750
-    [InlineData(4000, 6, 500)]  // (1500 - (2000 * 0.5)) = 500.5 truncated to 500
-    public void CalculateMonthly_SalaryReduction_AppliesCorrectly(
-        decimal salary, int months, decimal expectedEti)
-    {
-        var employee = new EtiEmployee
-        {
-            Age = 22,
-            MonthlySalary = salary,
-            EmploymentMonths = months,
-            IsFirstTimeEmployee = true
-        };
-
-        var result = _calculator.CalculateMonthly(employee);
-
-        Assert.Equal(expectedEti, result.Amount);
-    }
 }

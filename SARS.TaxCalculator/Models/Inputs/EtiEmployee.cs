@@ -34,4 +34,10 @@ public class EtiEmployee
     /// Indicates if an employee works in a Special Economic Zone
     /// </summary>
     public bool WorksInSpecialEconomicZone { get; init; }
+
+    /// <summary>
+    /// Number of hours worked in the month (for ETI proration)
+    /// If null, assumes 160+ hours (full ETI)
+    /// </summary>
+    public decimal? HoursWorkedInMonth { get; init; }
 }

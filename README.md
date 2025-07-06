@@ -5,22 +5,22 @@ A comprehensive South African SARS tax calculation NuGet package supporting PAYE
 [![NuGet](https://img.shields.io/nuget/v/SARS.TaxCalculator.svg)](https://www.nuget.org/packages/SARS.TaxCalculator/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![SARS Compliant](https://img.shields.io/badge/SARS-Compliant-green.svg)](https://www.sars.gov.za)
-[![Test Coverage](https://img.shields.io/badge/Coverage-98.63%25-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
-[![Tests](https://img.shields.io/badge/Tests-283%20Passing-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
+[![Test Coverage](https://img.shields.io/badge/Coverage-98.68%25-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
+[![Tests](https://img.shields.io/badge/Tests-295%20Passing-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
 
 ## Features
 
 - ✅ **PAYE Calculation** - With age-based rebates and medical aid credits
 - ✅ **UIF Calculation** - Employee and employer contributions with R17,712 monthly ceiling
 - ✅ **SDL Calculation** - Skills Development Levy with R500,000 annual exemption
-- ✅ **ETI Calculation** - Employment Tax Incentive for qualifying employees
+- ✅ **ETI Calculation** - Employment Tax Incentive with April 2025 changes (R2,500 max, hours proration)
 - ✅ **Medical Aid Credits** - R364 main/first dependent, R246 additional dependents
 - ✅ **Retirement Deductions** - Max 27.5% of taxable income, R350,000 annual cap
 - ✅ **Complete Payslips** - Full gross-to-net calculations
 - ✅ **Fluent API** - Intuitive, chainable interface
 - ✅ **Multi-year Support** - Tax years 2023, 2024, 2025, and 2026
 - ✅ **SARS Compliant** - Fully compliant with official SARS legislation and rounding rules
-- ✅ **Comprehensive Testing** - 98.63% line coverage with 283 passing tests
+- ✅ **Comprehensive Testing** - 98.68% line coverage with 295 passing tests
 - ✅ **Bulk Processing** - Calculate multiple employees efficiently
 - ✅ **.NET Standard 2.1** - Compatible with .NET Core 3.0+, .NET 5+, and .NET Framework 4.8+
 
@@ -207,6 +207,8 @@ TaxCalculator
 - UIF Monthly Ceiling: R17,712
 - SDL Exemption: R500,000 annual payroll
 - Retirement Deduction: 27.5% of income, max R350,000/year
+- ETI Maximum: R2,500/month (first year), R1,250/month (second year) for 160+ hours
+- ETI Salary Threshold: R7,500/month (effective April 2025)
 - ETI Age Range: 18-29 (except SEZ employees)
 
 ## SARS Compliance

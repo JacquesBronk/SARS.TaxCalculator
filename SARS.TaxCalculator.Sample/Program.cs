@@ -29,6 +29,9 @@ class Program
         // Example 5: Bulk calculations
         Example5_BulkCalculations();
 
+        // Example 6: ETI bulk calculation with April 2025 changes
+        Example6_EtiBulkCalculation();
+
         Console.WriteLine("\nPress any key to exit...");
         Console.ReadKey();
     }
@@ -83,10 +86,14 @@ class Program
 
     static void Example3_EtiCalculation()
     {
-        Console.WriteLine("Example 3: ETI (Employment Tax Incentive)");
-        Console.WriteLine("-----------------------------------------");
+        Console.WriteLine("Example 3: ETI (Employment Tax Incentive) - April 2025 Changes");
+        Console.WriteLine("--------------------------------------------------------------");
+        Console.WriteLine("Note: Maximum ETI increased to R2,500 (160+ hours) with R7,500 salary threshold");
+        Console.WriteLine();
 
-        var salaries = new[] { 2000m, 3500m, 5000m, 7000m };
+        // Example 3a: Different salary bands
+        Console.WriteLine("3a. ETI by Salary Band (160+ hours worked):");
+        var salaries = new[] { 1500m, 2499m, 3500m, 5500m, 7000m, 7500m, 8000m };
 
         foreach (var salary in salaries)
         {
@@ -97,8 +104,35 @@ class Program
                 .WithEtiDetails(employmentMonths: 6, isFirstTime: true)
                 .Calculate();
 
-            Console.WriteLine($"Salary R{salary:N2}: ETI = R{result.ETI:N2}");
+            Console.WriteLine($"  Salary R{salary:N2}: ETI = R{result.ETI:N2}");
         }
+
+        Console.WriteLine();
+        Console.WriteLine("3b. ETI with Hours Worked Proration:");
+
+        // Example 3b: Show ETI proration for part-time employees
+        var config = TaxYearData.GetConfiguration(2026);
+        var etiCalculator = new EtiCalculator(config.EtiConfig);
+
+        var hoursExamples = new[] { 160m, 120m, 80m, 40m };
+        var testSalary = 2000m;
+
+        foreach (var hours in hoursExamples)
+        {
+            var employee = new EtiEmployee
+            {
+                Age = 22,
+                MonthlySalary = testSalary,
+                EmploymentMonths = 6,
+                IsFirstTimeEmployee = true,
+                HoursWorkedInMonth = hours
+            };
+
+            var etiResult = etiCalculator.CalculateMonthly(employee);
+            var percentage = (hours / 160m) * 100;
+            Console.WriteLine($"  R{testSalary:N2} @ {hours} hours ({percentage:N0}% of full-time): ETI = R{etiResult.Amount:N2}");
+        }
+
         Console.WriteLine();
     }
 
@@ -171,6 +205,54 @@ class Program
         }
 
         Console.WriteLine("\nNote: UIF is capped at R177.12 for salaries above R17,712");
+        Console.WriteLine();
+    }
+
+    static void Example6_EtiBulkCalculation()
+    {
+        Console.WriteLine("Example 6: ETI Bulk Calculation - April 2025 Changes");
+        Console.WriteLine("---------------------------------------------------");
+
+        var config = TaxYearData.GetConfiguration(2026);
+        var etiCalculator = new EtiCalculator(config.EtiConfig);
+
+        // Create a diverse set of employees
+        var employees = new[]
+        {
+            new EtiEmployee { EmployeeId = "E001", Age = 22, MonthlySalary = 1800m, EmploymentMonths = 3, IsFirstTimeEmployee = true, HoursWorkedInMonth = 160 },
+            new EtiEmployee { EmployeeId = "E002", Age = 25, MonthlySalary = 2499m, EmploymentMonths = 8, IsFirstTimeEmployee = true, HoursWorkedInMonth = 160 },
+            new EtiEmployee { EmployeeId = "E003", Age = 28, MonthlySalary = 3500m, EmploymentMonths = 15, IsFirstTimeEmployee = false, HoursWorkedInMonth = 160 },
+            new EtiEmployee { EmployeeId = "E004", Age = 21, MonthlySalary = 2000m, EmploymentMonths = 6, IsFirstTimeEmployee = true, HoursWorkedInMonth = 80 }, // Part-time
+            new EtiEmployee { EmployeeId = "E005", Age = 26, MonthlySalary = 5500m, EmploymentMonths = 10, IsFirstTimeEmployee = true, HoursWorkedInMonth = 160 },
+            new EtiEmployee { EmployeeId = "E006", Age = 35, MonthlySalary = 4000m, EmploymentMonths = 5, IsFirstTimeEmployee = true, WorksInSpecialEconomicZone = true }, // SEZ
+            new EtiEmployee { EmployeeId = "E007", Age = 30, MonthlySalary = 3000m, EmploymentMonths = 12, IsFirstTimeEmployee = true, HoursWorkedInMonth = 160 }, // Ineligible - age
+            new EtiEmployee { EmployeeId = "E008", Age = 24, MonthlySalary = 8000m, EmploymentMonths = 6, IsFirstTimeEmployee = true, HoursWorkedInMonth = 160 }, // Ineligible - salary
+        };
+
+        var bulkResult = etiCalculator.CalculateBulk(employees);
+
+        Console.WriteLine($"Total Employees: {bulkResult.TotalEmployees}");
+        Console.WriteLine($"Eligible Employees: {bulkResult.EligibleEmployees}");
+        Console.WriteLine($"Total Monthly ETI: R{bulkResult.TotalEtiAmount:N2}");
+        Console.WriteLine($"Annual ETI Benefit: R{bulkResult.TotalEtiAmount * 12:N2}");
+        Console.WriteLine("\nDetailed Breakdown:");
+        Console.WriteLine("ID   | Age | Salary    | Hours | Months | ETI Amount | Status");
+        Console.WriteLine("-----|-----|-----------|-------|--------|------------|-------");
+
+        foreach (var result in bulkResult.IndividualResults)
+        {
+            var emp = result.Employee;
+            var hours = emp.HoursWorkedInMonth?.ToString("N0") ?? "Full";
+            var status = result.IsEligible ? "Eligible" : result.IneligibilityReason ?? "Ineligible";
+
+            Console.WriteLine($"{emp.EmployeeId,-4} | {emp.Age,3} | R{emp.MonthlySalary,8:N2} | {hours,5} | {emp.EmploymentMonths,6} | R{result.Amount,9:N2} | {status}");
+        }
+
+        Console.WriteLine("\nKey Points:");
+        Console.WriteLine("- Maximum ETI: R2,500 (first year) / R1,250 (second year) for 160+ hours");
+        Console.WriteLine("- ETI is prorated for employees working < 160 hours");
+        Console.WriteLine("- Special Economic Zone (SEZ) employees exempt from age restrictions");
+        Console.WriteLine("- Salary threshold: R7,500 (increased from R6,500)");
         Console.WriteLine();
     }
 }

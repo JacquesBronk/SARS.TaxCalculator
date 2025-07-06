@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [2026.1.1] - 2025-01-07
 
+### Changed
+- **ETI April 2025 Changes**: Implemented Employment Tax Incentive changes effective 1 April 2025
+  - Maximum ETI amount increased from R2,000 to R2,500 for employees working 160+ hours
+  - Maximum qualifying salary threshold increased from R6,500 to R7,500
+  - Added hours worked tracking and proration for employees working less than 160 hours
+  - Updated salary bands: R0-R2,499.99 (60%/30%), R2,500-R5,499.99 (fixed), R5,500-R7,499.99 (sliding scale)
+  - Source: https://www.sars.gov.za/latest-news/employment-tax-incentive-eti-changes-with-effect-from-1-april-2025/
+
+### Added
+- **Hours Worked Field**: Added `HoursWorkedInMonth` property to `EtiEmployee` model for ETI proration
+- **ETI Proration Logic**: ETI amounts are now prorated for employees working less than 160 hours per month
+- **Enhanced ETI Calculator**: Updated to handle percentage-based calculations for Band 1 (R0-R2,499.99)
+
+### Updated
+- **Test Coverage**: Updated all ETI tests to reflect new calculation rules and values
+- **Documentation**: Updated code comments with SARS ETI Guide (LAPD-ETI-G01) citations
+
 ### Added
 - **Tax Year 2026 Support**: Added full support for tax year 2026 (1 March 2025 - 28 February 2026)
 - **SARS Compliance Badge**: Added SARS compliance verification and badge to README

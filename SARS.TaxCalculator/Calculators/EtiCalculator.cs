@@ -14,6 +14,7 @@ namespace SARS.TaxCalculator.Calculators;
 /// Reference: https://www.sars.gov.za/types-of-tax/pay-as-you-earn/employment-tax-incentive-eti/
 /// Guide: SARS Guide to the Employment Tax Incentive (LAPD-ETI-G01)
 /// Changes effective 1 April 2025: https://www.sars.gov.za/latest-news/employment-tax-incentive-eti-changes-with-effect-from-1-april-2025/
+/// Key changes: Maximum ETI R2,500 (160+ hours), R7,500 salary threshold, proration for less than 160 hours
 /// </summary>
 public class EtiCalculator
 {
@@ -81,7 +82,10 @@ public class EtiCalculator
     /// <returns>Bulk ETI calculation results</returns>
     public EtiBulkResult CalculateBulk(IEnumerable<EtiEmployee> employees)
     {
-        var employeeList = employees.ToList() ?? throw new ArgumentNullException(nameof(employees));
+        if (employees == null)
+            throw new ArgumentNullException(nameof(employees));
+        
+        var employeeList = employees.ToList();
         var results = employeeList.Select(CalculateMonthly).ToList();
 
         return new EtiBulkResult
@@ -139,12 +143,32 @@ public class EtiCalculator
         var isFirstYear = employee.EmploymentMonths < 12;
         var baseAmount = isFirstYear ? band.FirstYearAmount : band.SecondYearAmount;
 
-        // Apply reduction for salaries above minimum in band
-        if (band.ReductionRate.HasValue && employee.MonthlySalary > band.MinSalary)
+        // Special handling for Band 1 (R0 - R2,499.99) - 60%/30% of remuneration
+        // Source: Employment Tax Incentive Act - Section 7(2)
+        if (band.MinSalary == 0 && band.MaxSalary == 2499.99m)
+        {
+            var percentage = isFirstYear ? 0.60m : 0.30m;
+            baseAmount = Math.Min(employee.MonthlySalary * percentage, baseAmount);
+        }
+        // Apply reduction for salaries above minimum in band (Band 3: R5,500 - R7,499.99)
+        else if (band.ReductionRate.HasValue && employee.MonthlySalary > band.MinSalary)
         {
             var excessAmount = employee.MonthlySalary - band.MinSalary;
             var reduction = excessAmount * band.ReductionRate.Value;
             baseAmount = Math.Max(0, baseAmount - reduction);
+        }
+
+        // Apply proration for employees working less than 160 hours
+        // Source: SARS ETI Guide - Hours worked requirement
+        if (employee.HoursWorkedInMonth.HasValue)
+        {
+            // Validate hours worked (max 744 hours = 31 days * 24 hours)
+            var hoursWorked = Math.Min(employee.HoursWorkedInMonth.Value, 744m);
+            
+            if (hoursWorked < 160)
+            {
+                baseAmount = baseAmount * (hoursWorked / 160m);
+            }
         }
 
         return SarsRounding.RoundEti(baseAmount);

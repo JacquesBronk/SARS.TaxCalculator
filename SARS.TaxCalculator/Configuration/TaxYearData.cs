@@ -90,13 +90,13 @@ public static class TaxYearData
             {
                 MinAge = 18,
                 MaxAge = 29,
-                MaxQualifyingSalary = 7500,
+                MaxQualifyingSalary = 6500,
                 Bands = new List<EtiBand>
                 {
                     new() { MinSalary = 0, MaxSalary = 2000, FirstYearAmount = 1500, SecondYearAmount = 750 },
                     new() { MinSalary = 2001, MaxSalary = 4500, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.5m },
                     new() { MinSalary = 4501, MaxSalary = 6500, FirstYearAmount = 750, SecondYearAmount = 375, ReductionRate = 0.25m },
-                    new() { MinSalary = 6501, MaxSalary = 7500, FirstYearAmount = 0, SecondYearAmount = 0 }
+                    new() { MinSalary = 6501, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
                 }
             },
             RetirementLimits = new RetirementContributionLimits
@@ -161,13 +161,13 @@ public static class TaxYearData
             {
                 MinAge = 18,
                 MaxAge = 29,
-                MaxQualifyingSalary = 7500,
+                MaxQualifyingSalary = 6500,
                 Bands = new List<EtiBand>
                 {
                     new() { MinSalary = 0, MaxSalary = 2000, FirstYearAmount = 1500, SecondYearAmount = 750 },
                     new() { MinSalary = 2001, MaxSalary = 4500, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.5m },
                     new() { MinSalary = 4501, MaxSalary = 6500, FirstYearAmount = 750, SecondYearAmount = 375, ReductionRate = 0.25m },
-                    new() { MinSalary = 6501, MaxSalary = 7500, FirstYearAmount = 0, SecondYearAmount = 0 }
+                    new() { MinSalary = 6501, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
                 }
             },
             RetirementLimits = new RetirementContributionLimits
@@ -183,7 +183,7 @@ public static class TaxYearData
         // 2025 tax year (1 March 2024 - 28 February 2025)
         // Source: SARS Tax Rates for Individuals - "No changes" announced 21 February 2024
         // Reference: https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/
-        // ETI changes effective 1 April 2025: https://www.sars.gov.za/latest-news/employment-tax-incentive-eti-changes-with-effect-from-1-april-2025/
+        // Note: ETI changes effective 1 April 2025 do NOT apply to this tax year (ends 28 Feb 2025)
         return new TaxYearConfiguration
         {
             Year = 2025,
@@ -232,13 +232,13 @@ public static class TaxYearData
             {
                 MinAge = 18,
                 MaxAge = 29,
-                MaxQualifyingSalary = 7500,
+                MaxQualifyingSalary = 6500,
                 Bands = new List<EtiBand>
                 {
                     new() { MinSalary = 0, MaxSalary = 2000, FirstYearAmount = 1500, SecondYearAmount = 750 },
                     new() { MinSalary = 2001, MaxSalary = 4500, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.5m },
                     new() { MinSalary = 4501, MaxSalary = 6500, FirstYearAmount = 750, SecondYearAmount = 375, ReductionRate = 0.25m },
-                    new() { MinSalary = 6501, MaxSalary = 7500, FirstYearAmount = 0, SecondYearAmount = 0 }
+                    new() { MinSalary = 6501, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
                 }
             },
             RetirementLimits = new RetirementContributionLimits
@@ -303,17 +303,26 @@ public static class TaxYearData
             {
                 MinAge = 18,
                 MaxAge = 29,
-                // NOTE: ETI changes effective 1 April 2025 - MaxQualifyingSalary increases to R7,500
-                // and amounts increase from R2,000 to R2,500 for employees working 160+ hours
+                // ETI changes effective 1 April 2025
                 // Source: https://www.sars.gov.za/latest-news/employment-tax-incentive-eti-changes-with-effect-from-1-april-2025/
-                // Current values maintained for test compatibility - update when implementing April 2025 changes
+                // Changes: MaxQualifyingSalary increased to R7,500
+                // Maximum ETI for employees working 160+ hours: R2,500
+                // ETI is prorated for employees working < 160 hours
                 MaxQualifyingSalary = 7500,
+                // ETI bands updated for April 2025 changes
+                // Source: Employment Tax Incentive Act - Section 7
+                // SARS ETI Guide (LAPD-ETI-G01) - Updated April 2025
+                // Maximum ETI: R2,500 (first year) / R1,250 (second year) for 160+ hours worked
                 Bands = new List<EtiBand>
                 {
-                    new() { MinSalary = 0, MaxSalary = 2000, FirstYearAmount = 1500, SecondYearAmount = 750 },
-                    new() { MinSalary = 2001, MaxSalary = 4500, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.5m },
-                    new() { MinSalary = 4501, MaxSalary = 6500, FirstYearAmount = 750, SecondYearAmount = 375, ReductionRate = 0.25m },
-                    new() { MinSalary = 6501, MaxSalary = 7500, FirstYearAmount = 0, SecondYearAmount = 0 }
+                    // Band 1: R0 - R2,499.99 - 60% of remuneration (capped at R2,500/R1,250)
+                    new() { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250 },
+                    // Band 2: R2,500 - R5,499.99 - Fixed amounts
+                    new() { MinSalary = 2500, MaxSalary = 5499.99m, FirstYearAmount = 1500, SecondYearAmount = 750 },
+                    // Band 3: R5,500 - R7,499.99 - Sliding scale reduction
+                    new() { MinSalary = 5500, MaxSalary = 7499.99m, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.75m },
+                    // Band 4: R7,500+ - No ETI
+                    new() { MinSalary = 7500, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
                 }
             },
             RetirementLimits = new RetirementContributionLimits
