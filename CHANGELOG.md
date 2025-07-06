@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2025.1.1] - 2025-01-07
+## [2026.1.1] - 2025-01-07
 
 ### Added
 - **Tax Year 2026 Support**: Added full support for tax year 2026 (1 March 2025 - 28 February 2026)
@@ -32,7 +32,7 @@ All notable changes to this project will be documented in this file.
 - **Best Practices**: Updated NuGet package metadata following 2025 best practices
 
 ### Technical
-- **Version Bump**: Updated package version to 2025.1.1
+- **Version Bump**: Updated package version to 2026.1.1
 - **Copyright Notice**: Added proper copyright information
 - **Repository Metadata**: Enhanced repository URL and project information
 - **Symbol Packages**: Maintained symbol package generation for debugging

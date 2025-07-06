@@ -246,4 +246,4 @@ For questions about testing or to report test failures:
 ---
 
 *Last Updated: 2025-01-06*  
-*Test Suite Version: Compatible with SARS.TaxCalculator v2025.1.1*
+*Test Suite Version: Compatible with SARS.TaxCalculator v2026.1.1*

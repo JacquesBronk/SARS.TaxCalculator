@@ -8,7 +8,7 @@
     
     <!-- Package Identity -->
     <PackageId>SARS.TaxCalculator</PackageId>
-    <Version>2025.1.1</Version>
+    <Version>2026.1.1</Version>
     <Authors>Jacques Bronkhorst</Authors>
     <Company>Jacques Bronkhorst</Company>
     
@@ -18,7 +18,7 @@
 
 DISCLAIMER: This software is provided for informational and educational purposes only. While every effort has been made to ensure accuracy and compliance with SARS regulations, the author makes no warranties or guarantees regarding the correctness, completeness, or reliability of the calculations. Users are solely responsible for verifying all calculations and ensuring compliance with current tax regulations. The author shall not be held liable for any errors, omissions, or damages arising from the use of this software. Always consult with qualified tax professionals for official tax advice.</Description>
     <PackageTags>sars;tax;payroll;south-africa;paye;uif;sdl;eti;tax-calculator;compliance;legislation;fourth-schedule;employment-tax-incentive;payslip;tested;reliable;quality</PackageTags>
-    <PackageReleaseNotes>Version 2025.1.1: Added tax year 2026 support. Full SARS compliance review and validation. Fixed ETI rounding per SARS validation rules. Added Special Economic Zone age exemptions. Enhanced documentation with official SARS citations. Achieved 98.63% test coverage with 283 comprehensive tests covering edge cases, bulk processing, and compliance validation.</PackageReleaseNotes>
+    <PackageReleaseNotes>Version 2026.1.1: Added tax year 2026 support. Full SARS compliance review and validation. Fixed ETI rounding per SARS validation rules. Added Special Economic Zone age exemptions. Enhanced documentation with official SARS citations. Achieved 98.63% test coverage with 283 comprehensive tests covering edge cases, bulk processing, and compliance validation.</PackageReleaseNotes>
     <Copyright>This work is in the public domain</Copyright>
     <Summary>SARS-compliant South African tax calculation library for PAYE, UIF, SDL, and ETI calculations.</Summary>
     
