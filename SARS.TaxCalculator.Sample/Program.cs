@@ -16,16 +16,16 @@ class Program
 
         // Example 1: Basic tax calculation using fluent API
         Example1_BasicCalculation();
-        
+
         // Example 2: Different age groups
         Example2_AgeGroupComparison();
-        
+
         // Example 3: ETI calculation
         Example3_EtiCalculation();
-        
+
         // Example 4: Complete payslip
         Example4_CompletePayslip();
-        
+
         // Example 5: Bulk calculations
         Example5_BulkCalculations();
 
@@ -87,7 +87,7 @@ class Program
         Console.WriteLine("-----------------------------------------");
 
         var salaries = new[] { 2000m, 3500m, 5000m, 7000m };
-        
+
         foreach (var salary in salaries)
         {
             var result = TaxCalculator
@@ -155,7 +155,7 @@ class Program
         Console.WriteLine("-----------------------------------");
 
         var salaries = new[] { 15000m, 25000m, 35000m, 50000m, 75000m, 100000m };
-        
+
         Console.WriteLine("Monthly Salary | PAYE      | UIF     | Net Salary");
         Console.WriteLine("---------------|-----------|---------|------------");
 

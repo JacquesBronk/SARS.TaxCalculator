@@ -45,7 +45,7 @@ public class MedicalAidCreditTests
     [Fact]
     public void CalculateMonthlyCredit_NegativeDependents_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _credit.CalculateMonthlyCredit(-1));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -53,7 +53,7 @@ public class MedicalAidCreditTests
     [Fact]
     public void CalculateAnnualCredit_NegativeDependents_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _credit.CalculateAnnualCredit(-1));
         Assert.Contains("cannot be negative", exception.Message);
     }

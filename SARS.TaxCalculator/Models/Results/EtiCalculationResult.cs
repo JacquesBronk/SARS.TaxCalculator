@@ -13,7 +13,7 @@ public class EtiEligibility
     /// Whether the employee is eligible
     /// </summary>
     public bool IsEligible { get; init; }
-    
+
     /// <summary>
     /// Reason for ineligibility (if applicable)
     /// </summary>
@@ -29,22 +29,22 @@ public class EtiCalculationResult
     /// Monthly ETI amount
     /// </summary>
     public decimal Amount { get; init; }
-    
+
     /// <summary>
     /// Whether the employee is eligible
     /// </summary>
     public bool IsEligible { get; init; }
-    
+
     /// <summary>
     /// Reason for ineligibility (if applicable)
     /// </summary>
     public string? IneligibilityReason { get; init; }
-    
+
     /// <summary>
     /// Employee details
     /// </summary>
     public EtiEmployee Employee { get; init; } = new();
-    
+
     /// <summary>
     /// Applied ETI band
     /// </summary>
@@ -60,17 +60,17 @@ public class EtiBulkResult
     /// Total number of employees
     /// </summary>
     public int TotalEmployees { get; init; }
-    
+
     /// <summary>
     /// Number of eligible employees
     /// </summary>
     public int EligibleEmployees { get; init; }
-    
+
     /// <summary>
     /// Total ETI amount
     /// </summary>
     public decimal TotalEtiAmount { get; init; }
-    
+
     /// <summary>
     /// Individual calculation results
     /// </summary>

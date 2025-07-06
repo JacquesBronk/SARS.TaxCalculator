@@ -166,7 +166,7 @@ public class PayslipCalculatorTests
 
         Assert.Equal(3000, result.EmployerContributions.RetirementContribution);
         Assert.Equal(2000, result.EmployerContributions.MedicalAidContribution);
-        
+
         // Cost to Company = Gross + Employer UIF + SDL + Employer Retirement + Employer Medical
         var expectedCtc = 30000 + 177.12m + 300 + 3000 + 2000;
         Assert.Equal(expectedCtc, result.Summary.CostToCompany);

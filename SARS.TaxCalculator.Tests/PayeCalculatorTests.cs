@@ -30,7 +30,7 @@ public class PayeCalculatorTests
     {
         var monthlyIncome = annualIncome / 12;
         var result = _calculator.CalculateMonthlyPaye(monthlyIncome, age, medicalAidMembers);
-        
+
         Assert.Equal(expectedMonthlyPaye, result, 2);
     }
 
@@ -64,7 +64,7 @@ public class PayeCalculatorTests
         var grossTax = 117506.69m; // Calculated gross tax for R500,000
         var annualPaye = _calculator.CalculateAnnualPaye(annualIncome, age, 0);
         var expectedPaye = grossTax - expectedRebates;
-        
+
         Assert.Equal(expectedPaye, annualPaye);
     }
 
@@ -78,10 +78,10 @@ public class PayeCalculatorTests
     {
         var monthlyIncome = 50000m;
         var age = 35;
-        
+
         var payeWithoutMedical = _calculator.CalculateMonthlyPaye(monthlyIncome, age, 0);
         var payeWithMedical = _calculator.CalculateMonthlyPaye(monthlyIncome, age, medicalAidMembers);
-        
+
         var difference = payeWithoutMedical - payeWithMedical;
         Assert.Equal(expectedMonthlyCredit, difference, 2);
     }
@@ -92,11 +92,11 @@ public class PayeCalculatorTests
         var annualGross = 600000m;
         var retirementContribution = 165000m; // 27.5% of gross
         var age = 40;
-        
+
         var payeWithoutRetirement = _calculator.CalculateAnnualPaye(annualGross, age, 0);
         var payeWithRetirement = _calculator.CalculatePayeWithRetirement(
             annualGross, retirementContribution, age, 0);
-        
+
         Assert.True(payeWithRetirement < payeWithoutRetirement);
     }
 
@@ -106,12 +106,12 @@ public class PayeCalculatorTests
         var annualGross = 2000000m;
         var retirementContribution = 600000m; // 30% of gross, above cap
         var age = 40;
-        
+
         var payeWithCappedRetirement = _calculator.CalculatePayeWithRetirement(
             annualGross, 350000m, age, 0); // Max deduction
         var payeWithExcessRetirement = _calculator.CalculatePayeWithRetirement(
             annualGross, retirementContribution, age, 0);
-        
+
         Assert.Equal(payeWithCappedRetirement, payeWithExcessRetirement);
     }
 
@@ -120,7 +120,7 @@ public class PayeCalculatorTests
     [InlineData(-1)]
     public void CalculateAnnualPaye_NegativeIncome_ThrowsException(decimal negativeIncome)
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateAnnualPaye(negativeIncome, 30, 0));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -130,7 +130,7 @@ public class PayeCalculatorTests
     [InlineData(151)]
     public void CalculateAnnualPaye_InvalidAge_ThrowsException(int invalidAge)
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateAnnualPaye(100000, invalidAge, 0));
         Assert.Contains("between 0 and 150", exception.Message);
     }
@@ -138,7 +138,7 @@ public class PayeCalculatorTests
     [Fact]
     public void CalculateAnnualPaye_NegativeMedicalAidMembers_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateAnnualPaye(100000, 30, -1));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -152,9 +152,9 @@ public class PayeCalculatorTests
     {
         var config = TaxYearData.GetConfiguration(year);
         var calculator = new PayeCalculator(config);
-        
+
         var monthlyPaye = calculator.CalculateMonthlyPaye(50000, 35, 2);
-        
+
         // All years have same rates
         Assert.Equal(10574.64m, monthlyPaye, 2);
     }

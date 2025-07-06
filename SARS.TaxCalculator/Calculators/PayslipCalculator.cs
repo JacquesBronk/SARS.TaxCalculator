@@ -50,13 +50,13 @@ public class PayslipCalculator
 
         // Calculate deductions
         var deductions = CalculateDeductions(input, monthlyGross, annualGross);
-        
+
         // Calculate employer contributions
         var employerContributions = CalculateEmployerContributions(input, monthlyGross);
-        
+
         // Calculate ETI if applicable
         var eti = CalculateEti(input, monthlyGross);
-        
+
         // Build payslip
         return new Payslip
         {
@@ -141,7 +141,7 @@ public class PayslipCalculator
         var uif = _uifCalculator.CalculateMonthly(monthlyGross);
 
         // Calculate total deductions
-        var totalDeductions = monthlyPaye + uif.EmployeeAmount + monthlyRetirement + 
+        var totalDeductions = monthlyPaye + uif.EmployeeAmount + monthlyRetirement +
                              input.MedicalAidContribution + input.OtherDeductions;
 
         return new EmployeeDeductions
@@ -152,8 +152,8 @@ public class PayslipCalculator
             MedicalAidContribution = input.MedicalAidContribution,
             OtherDeductions = input.OtherDeductions,
             TotalDeductions = totalDeductions,
-            MedicalAidTaxCredit = input.MedicalAidMembers > 0 
-                ? _config.MedicalAidCredit.CalculateMonthlyCredit(input.MedicalAidMembers - 1) 
+            MedicalAidTaxCredit = input.MedicalAidMembers > 0
+                ? _config.MedicalAidCredit.CalculateMonthlyCredit(input.MedicalAidMembers - 1)
                 : 0
         };
     }
@@ -169,8 +169,8 @@ public class PayslipCalculator
             SDL = sdl.Amount,
             RetirementContribution = input.EmployerRetirementContribution,
             MedicalAidContribution = input.EmployerMedicalAidContribution,
-            TotalContributions = uif.EmployerAmount + sdl.Amount + 
-                               input.EmployerRetirementContribution + 
+            TotalContributions = uif.EmployerAmount + sdl.Amount +
+                               input.EmployerRetirementContribution +
                                input.EmployerMedicalAidContribution
         };
     }
@@ -200,7 +200,7 @@ public class PayslipCalculator
         };
     }
 
-    private PayslipSummary CalculateSummary(decimal monthlyGross, EmployeeDeductions deductions, 
+    private PayslipSummary CalculateSummary(decimal monthlyGross, EmployeeDeductions deductions,
         EmployerContributions employerContributions, EtiInfo? eti)
     {
         var netPay = monthlyGross - deductions.TotalDeductions;

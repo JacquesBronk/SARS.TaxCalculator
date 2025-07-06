@@ -9,12 +9,12 @@ public class TaxThreshold
     /// Minimum age for this threshold (null for no minimum)
     /// </summary>
     public int? MinAge { get; init; }
-    
+
     /// <summary>
     /// Maximum age for this threshold (null for no maximum)
     /// </summary>
     public int? MaxAge { get; init; }
-    
+
     /// <summary>
     /// The annual income threshold below which no tax is payable
     /// </summary>

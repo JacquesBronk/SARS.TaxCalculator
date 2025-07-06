@@ -31,7 +31,7 @@ public class PerformanceAndStressTests
         }
 
         var result = calculator.CalculateBulk(employees);
-        
+
         Assert.NotNull(result);
         Assert.Equal(1000, result.TotalEmployees);
         Assert.True(result.EligibleEmployees > 0);
@@ -53,7 +53,7 @@ public class PerformanceAndStressTests
         }
 
         var result = calculator.CalculateBulk(salaries);
-        
+
         Assert.NotNull(result);
         Assert.Equal(5000, result.EmployeeCount);
         Assert.True(result.TotalPayroll > 0);
@@ -115,8 +115,8 @@ public class PerformanceAndStressTests
             var result = calculator.CalculatePayeWithRetirement(
                 scenario.Income, scenario.Retirement, 35, 0);
             var resultWithoutRetirement = calculator.CalculateAnnualPaye(scenario.Income, 35, 0);
-            
-            Assert.True(result < resultWithoutRetirement, 
+
+            Assert.True(result < resultWithoutRetirement,
                 $"PAYE with retirement should be less for income {scenario.Income}");
         }
     }
@@ -125,19 +125,19 @@ public class PerformanceAndStressTests
     public void AllCalculators_ZeroInputs_HandleGracefully()
     {
         var config = TaxYearData.GetConfiguration(2024);
-        
+
         // PAYE Calculator with zero income
         var payeCalc = new PayeCalculator(config);
         Assert.Equal(0, payeCalc.CalculateAnnualPaye(0, 30));
         Assert.Equal(0, payeCalc.CalculateMonthlyPaye(0, 30));
-        
+
         // UIF Calculator with zero income
         var uifCalc = new UifCalculator(config.UifConfig);
         var uifResult = uifCalc.CalculateMonthly(0);
         Assert.Equal(0, uifResult.EmployeeAmount);
         Assert.Equal(0, uifResult.EmployerAmount);
         Assert.False(uifResult.CeilingApplied);
-        
+
         // SDL Calculator with zero income
         var sdlCalc = new SdlCalculator(config.SdlConfig);
         var sdlResult = sdlCalc.CalculateMonthly(0, 1000000);
@@ -149,7 +149,7 @@ public class PerformanceAndStressTests
     public void TaxCalculator_AllTaxYears_HandleConsistently()
     {
         var supportedYears = TaxCalculator.SupportedYears;
-        
+
         foreach (var year in supportedYears)
         {
             var result = TaxCalculator
@@ -157,7 +157,7 @@ public class PerformanceAndStressTests
                 .WithGrossSalary(25000)
                 .WithAge(35)
                 .Calculate();
-            
+
             Assert.NotNull(result);
             Assert.Equal(year, result.TaxYear);
             Assert.Equal(25000, result.GrossSalary);
@@ -206,12 +206,12 @@ public class PerformanceAndStressTests
         var calculator = new PayeCalculator(config);
 
         var ageGroups = new[] { 25, 45, 65, 75, 85 };
-        
+
         foreach (var age in ageGroups)
         {
             var result = calculator.CalculateAnnualPaye(300000, age, 2);
             Assert.True(result >= 0);
-            
+
             var monthlyResult = calculator.CalculateMonthlyPaye(25000, age, 2);
             Assert.True(monthlyResult >= 0);
         }
@@ -224,13 +224,13 @@ public class PerformanceAndStressTests
         var calculator = new SdlCalculator(config.SdlConfig);
 
         var payrollScenarios = new[] { 400000m, 500000m, 500001m, 1000000m, 10000000m };
-        
+
         foreach (var payroll in payrollScenarios)
         {
             var result = calculator.CalculateMonthly(25000, payroll);
             Assert.NotNull(result);
             Assert.True(result.Amount >= 0);
-            
+
             if (payroll <= 500000)
                 Assert.True(result.IsExempt);
             else
@@ -245,7 +245,7 @@ public class PerformanceAndStressTests
         var calculator = new UifCalculator(config.UifConfig);
 
         var incomeScenarios = new[] { 0m, 5000m, 10000m, 17712m, 17713m, 25000m, 50000m };
-        
+
         foreach (var income in incomeScenarios)
         {
             var result = calculator.CalculateMonthly(income);
@@ -253,7 +253,7 @@ public class PerformanceAndStressTests
             Assert.True(result.EmployeeAmount >= 0);
             Assert.True(result.EmployerAmount >= 0);
             Assert.Equal(result.EmployeeAmount, result.EmployerAmount);
-            
+
             if (income > 17712)
                 Assert.True(result.CeilingApplied);
             else

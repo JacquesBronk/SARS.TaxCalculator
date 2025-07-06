@@ -85,7 +85,7 @@ public class TaxCalculationBuilder
     {
         if (age < 0 || age > 150)
             throw new ArgumentException("Age must be between 0 and 150", nameof(age));
-        
+
         _age = age;
         return this;
     }
@@ -100,7 +100,7 @@ public class TaxCalculationBuilder
     {
         if (numberOfMembers < 1)
             throw new ArgumentException("Number of medical aid members must be at least 1", nameof(numberOfMembers));
-        
+
         _medicalAidMembers = numberOfMembers;
         _medicalAidContribution = monthlyContribution;
         return this;
@@ -115,7 +115,7 @@ public class TaxCalculationBuilder
     {
         if (percentage < 0 || percentage > 1)
             throw new ArgumentException("Retirement contribution percentage must be between 0 and 1", nameof(percentage));
-        
+
         _retirementContributionPercentage = percentage;
         _retirementContributionAmount = 0;
         return this;
@@ -130,7 +130,7 @@ public class TaxCalculationBuilder
     {
         if (monthlyAmount < 0)
             throw new ArgumentException("Retirement contribution cannot be negative", nameof(monthlyAmount));
-        
+
         _retirementContributionAmount = monthlyAmount;
         _retirementContributionPercentage = 0;
         return this;
@@ -145,7 +145,7 @@ public class TaxCalculationBuilder
     {
         if (annualPayroll < 0)
             throw new ArgumentException("Annual payroll cannot be negative", nameof(annualPayroll));
-        
+
         _annualPayroll = annualPayroll;
         return this;
     }
@@ -228,8 +228,8 @@ public class TaxCalculationBuilder
             ETI = etiAmount,
             RetirementContribution = monthlyRetirement,
             MedicalAidContribution = _medicalAidContribution,
-            MedicalAidTaxCredit = _medicalAidMembers > 0 
-                ? _config.MedicalAidCredit.CalculateMonthlyCredit(_medicalAidMembers - 1) 
+            MedicalAidTaxCredit = _medicalAidMembers > 0
+                ? _config.MedicalAidCredit.CalculateMonthlyCredit(_medicalAidMembers - 1)
                 : 0,
             NetSalary = netSalary,
             EmployerUIF = uif.EmployerAmount,

@@ -23,37 +23,37 @@ public class Payslip
     /// </summary>
     /// <value>The <see cref="EmployeeInfo"/> containing employee details.</value>
     public EmployeeInfo Employee { get; init; } = new();
-    
+
     /// <summary>
     /// Gets or sets the pay period information for this payslip.
     /// </summary>
     /// <value>The <see cref="PayPeriod"/> containing month, year, and tax year details.</value>
     public PayPeriod Period { get; init; } = new();
-    
+
     /// <summary>
     /// Gets or sets the earnings breakdown for this payslip.
     /// </summary>
     /// <value>The <see cref="Earnings"/> containing salary and gross earnings information.</value>
     public Earnings Earnings { get; init; } = new();
-    
+
     /// <summary>
     /// Gets or sets the employee deductions for this payslip.
     /// </summary>
     /// <value>The <see cref="EmployeeDeductions"/> containing PAYE, UIF, and other deductions.</value>
     public EmployeeDeductions Deductions { get; init; } = new();
-    
+
     /// <summary>
     /// Gets or sets the employer contributions for this payslip.
     /// </summary>
     /// <value>The <see cref="EmployerContributions"/> containing UIF, SDL, and other employer contributions.</value>
     public EmployerContributions EmployerContributions { get; init; } = new();
-    
+
     /// <summary>
     /// Gets or sets the Employment Tax Incentive information for this payslip.
     /// </summary>
     /// <value>The <see cref="EtiInfo"/> containing ETI amount and eligibility details, or null if not applicable.</value>
     public EtiInfo? ETI { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the payslip summary containing totals and net pay calculations.
     /// </summary>
@@ -75,21 +75,21 @@ public class EmployeeInfo
     /// <value>The employee identifier as provided in the payslip input.</value>
     /// <example>"EMP001", "12345"</example>
     public string EmployeeId { get; init; } = string.Empty;
-    
+
     /// <summary>
     /// Gets or sets the full name of the employee.
     /// </summary>
     /// <value>The employee's full legal name.</value>
     /// <example>"John Doe", "Jane Smith"</example>
     public string Name { get; init; } = string.Empty;
-    
+
     /// <summary>
     /// Gets or sets the employee's age in years.
     /// </summary>
     /// <value>The age used for determining applicable tax rebates and ETI eligibility.</value>
     /// <example>25, 35, 65</example>
     public int Age { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the employee's South African tax number.
     /// </summary>
@@ -113,14 +113,14 @@ public class PayPeriod
     /// <value>The month number (1-12) where 1 = January, 12 = December.</value>
     /// <example>1, 6, 12</example>
     public int Month { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the calendar year for which the payslip is calculated.
     /// </summary>
     /// <value>The calendar year (e.g., 2024, 2025, 2026).</value>
     /// <example>2024, 2025, 2026</example>
     public int Year { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the tax year configuration used for calculations.
     /// </summary>
@@ -148,7 +148,7 @@ public class Earnings
     /// <value>The basic salary in South African Rand (ZAR) before any additions or deductions.</value>
     /// <example>25000.00m, 45000.00m</example>
     public decimal BasicSalary { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total gross earnings amount.
     /// </summary>
@@ -178,7 +178,7 @@ public class EmployeeDeductions
     /// </remarks>
     /// <example>2500.00m, 8750.00m</example>
     public decimal PAYE { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the Unemployment Insurance Fund (UIF) contribution deducted from the employee.
     /// </summary>
@@ -188,7 +188,7 @@ public class EmployeeDeductions
     /// </remarks>
     /// <example>177.12m, 250.00m</example>
     public decimal UIF { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the retirement fund contribution made by the employee.
     /// </summary>
@@ -198,7 +198,7 @@ public class EmployeeDeductions
     /// </remarks>
     /// <example>1875.00m, 5000.00m</example>
     public decimal RetirementContribution { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the medical aid contribution paid by the employee.
     /// </summary>
@@ -208,7 +208,7 @@ public class EmployeeDeductions
     /// </remarks>
     /// <example>1500.00m, 3500.00m</example>
     public decimal MedicalAidContribution { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the medical aid tax credit applied to reduce PAYE.
     /// </summary>
@@ -219,7 +219,7 @@ public class EmployeeDeductions
     /// </remarks>
     /// <example>364.00m, 728.00m, 1338.00m</example>
     public decimal MedicalAidTaxCredit { get; init; }
-    
+
     /// <summary>
     /// Gets or sets other miscellaneous deductions from the employee's salary.
     /// </summary>
@@ -229,7 +229,7 @@ public class EmployeeDeductions
     /// </remarks>
     /// <example>500.00m, 1200.00m</example>
     public decimal OtherDeductions { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total of all deductions applied to the employee's salary.
     /// </summary>
@@ -260,7 +260,7 @@ public class EmployerContributions
     /// </remarks>
     /// <example>177.12m, 250.00m</example>
     public decimal UIF { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the Skills Development Levy (SDL) paid by the employer.
     /// </summary>
@@ -271,7 +271,7 @@ public class EmployerContributions
     /// </remarks>
     /// <example>0.00m (exempt company), 250.00m, 500.00m</example>
     public decimal SDL { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the retirement fund contribution made by the employer.
     /// </summary>
@@ -282,7 +282,7 @@ public class EmployerContributions
     /// </remarks>
     /// <example>0.00m, 1875.00m, 3750.00m</example>
     public decimal RetirementContribution { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the medical aid contribution made by the employer.
     /// </summary>
@@ -293,7 +293,7 @@ public class EmployerContributions
     /// </remarks>
     /// <example>0.00m, 1000.00m, 2500.00m</example>
     public decimal MedicalAidContribution { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total of all employer contributions.
     /// </summary>
@@ -326,7 +326,7 @@ public class EtiInfo
     /// </remarks>
     /// <example>1500, 750, 375</example>
     public decimal Amount { get; init; }
-    
+
     /// <summary>
     /// Gets or sets a value indicating whether the employee is eligible for ETI.
     /// </summary>
@@ -335,7 +335,7 @@ public class EtiInfo
     /// Eligibility depends on age (18-29, or any age for SEZ), salary (≤ R7,500), and employment duration (≤ 24 months for experienced employees).
     /// </remarks>
     public bool IsEligible { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the reason why the employee is not eligible for ETI.
     /// </summary>
@@ -362,14 +362,14 @@ public class PayslipSummary
     /// <value>The total gross earnings in ZAR before any deductions are applied.</value>
     /// <example>25000.00m, 50000.00m</example>
     public decimal GrossPay { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total of all deductions applied to the gross pay.
     /// </summary>
     /// <value>The sum of all employee deductions in ZAR (PAYE + UIF + contributions + other deductions - medical aid credits).</value>
     /// <example>7500.00m, 15000.00m</example>
     public decimal TotalDeductions { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the net pay amount after all deductions.
     /// </summary>
@@ -379,7 +379,7 @@ public class PayslipSummary
     /// </remarks>
     /// <example>17500.00m, 35000.00m</example>
     public decimal NetPay { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total cost to the company for employing this person.
     /// </summary>
@@ -389,7 +389,7 @@ public class PayslipSummary
     /// </remarks>
     /// <example>27500.00m, 55000.00m</example>
     public decimal CostToCompany { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the net PAYE amount payable to SARS after ETI offset.
     /// </summary>
@@ -426,7 +426,7 @@ public class BulkPayslipResult
     /// Each payslip contains complete calculation details for an individual employee.
     /// </remarks>
     public IReadOnlyList<Payslip> Payslips { get; init; } = new List<Payslip>();
-    
+
     /// <summary>
     /// Gets or sets the aggregated summary of all payslips processed.
     /// </summary>
@@ -452,14 +452,14 @@ public class BulkPayslipSummary
     /// <value>The count of employees included in the bulk calculation.</value>
     /// <example>50, 100, 250</example>
     public int TotalEmployees { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total gross earnings across all employees.
     /// </summary>
     /// <value>The sum of all gross earnings in ZAR across all employees processed.</value>
     /// <example>1250000.00m, 2500000.00m</example>
     public decimal TotalGrossEarnings { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total PAYE tax across all employees.
     /// </summary>
@@ -469,7 +469,7 @@ public class BulkPayslipSummary
     /// </remarks>
     /// <example>187500.00m, 375000.00m</example>
     public decimal TotalPAYE { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total UIF contributions across all employees.
     /// </summary>
@@ -479,7 +479,7 @@ public class BulkPayslipSummary
     /// </remarks>
     /// <example>25000.00m, 50000.00m</example>
     public decimal TotalUIF { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total Skills Development Levy across all employees.
     /// </summary>
@@ -489,7 +489,7 @@ public class BulkPayslipSummary
     /// </remarks>
     /// <example>12500.00m, 25000.00m</example>
     public decimal TotalSDL { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total Employment Tax Incentive across all employees.
     /// </summary>
@@ -499,7 +499,7 @@ public class BulkPayslipSummary
     /// </remarks>
     /// <example>45000.00m, 90000.00m</example>
     public decimal TotalETI { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total net pay across all employees.
     /// </summary>
@@ -509,7 +509,7 @@ public class BulkPayslipSummary
     /// </remarks>
     /// <example>875000.00m, 1750000.00m</example>
     public decimal TotalNetPay { get; init; }
-    
+
     /// <summary>
     /// Gets or sets the total cost to company across all employees.
     /// </summary>

@@ -120,7 +120,7 @@ public class TaxCalculatorFluentApiTests
 
         Assert.True(result.MonthlyPAYE > 0);
         // Monthly PAYE * 12 may differ slightly from Annual PAYE due to rounding
-        Assert.True(Math.Abs(result.MonthlyPAYE * 12 - result.AnnualPAYE) <= 0.12m, 
+        Assert.True(Math.Abs(result.MonthlyPAYE * 12 - result.AnnualPAYE) <= 0.12m,
             $"Monthly PAYE * 12 ({result.MonthlyPAYE * 12}) should be within 12 cents of Annual PAYE ({result.AnnualPAYE})");
         Assert.Equal(540000, result.TaxableIncome); // 600000 - 60000 retirement
         Assert.Equal(95750, result.TaxThreshold);
@@ -142,7 +142,7 @@ public class TaxCalculatorFluentApiTests
     [Fact]
     public void ForTaxYear_UnsupportedYear_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2022));
         Assert.Contains("not supported", exception.Message);
     }
@@ -163,18 +163,18 @@ public class TaxCalculatorFluentApiTests
     [InlineData(151)]
     public void WithAge_InvalidAge_ThrowsException(int invalidAge)
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithAge(invalidAge));
-            
+
         Assert.Contains("between 0 and 150", exception.Message);
     }
 
     [Fact]
     public void WithMedicalAid_ZeroMembers_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithMedicalAid(0));
-            
+
         Assert.Contains("at least 1", exception.Message);
     }
 
@@ -183,9 +183,9 @@ public class TaxCalculatorFluentApiTests
     [InlineData(1.1)]
     public void WithRetirementContribution_InvalidPercentage_ThrowsException(decimal invalidPercentage)
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithRetirementContribution(invalidPercentage));
-            
+
         Assert.Contains("between 0 and 1", exception.Message);
     }
 
@@ -210,10 +210,10 @@ public class TaxCalculatorFluentApiTests
         Assert.Equal(177.12m, result.EmployerUIF);
         Assert.Equal(300m, result.SDL);
         Assert.Equal(0, result.ETI); // Salary too high for ETI
-        
+
         // Cost to company = Gross + Employer UIF + SDL
         Assert.Equal(30000 + 177.12m + 300m, result.CostToCompany);
-        
+
         // Net salary = Gross - PAYE - UIF - Retirement - Medical
         var expectedNet = 30000 - result.PAYE - 177.12m - 3000 - 4500;
         Assert.Equal(expectedNet, result.NetSalary);

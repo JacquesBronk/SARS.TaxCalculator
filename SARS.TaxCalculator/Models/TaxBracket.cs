@@ -11,17 +11,17 @@ public class TaxBracket
     /// The minimum income for this tax bracket (inclusive)
     /// </summary>
     public decimal MinIncome { get; init; }
-    
+
     /// <summary>
     /// The maximum income for this tax bracket (inclusive, null for unlimited)
     /// </summary>
     public decimal? MaxIncome { get; init; }
-    
+
     /// <summary>
     /// The base tax amount for this bracket
     /// </summary>
     public decimal BaseTax { get; init; }
-    
+
     /// <summary>
     /// The tax rate percentage for income above MinIncome
     /// </summary>
@@ -36,11 +36,11 @@ public class TaxBracket
     {
         if (taxableIncome < MinIncome)
             return 0;
-            
-        var taxableAmountInBracket = MaxIncome.HasValue 
+
+        var taxableAmountInBracket = MaxIncome.HasValue
             ? Math.Min(taxableIncome - MinIncome, MaxIncome.Value - MinIncome)
             : taxableIncome - MinIncome;
-            
+
         return BaseTax + (taxableAmountInBracket * Rate / 100);
     }
 }

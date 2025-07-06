@@ -11,22 +11,22 @@ public class SdlContribution
     /// SDL amount
     /// </summary>
     public decimal Amount { get; init; }
-    
+
     /// <summary>
     /// Indicates whether the company is exempt from SDL
     /// </summary>
     public bool IsExempt { get; init; }
-    
+
     /// <summary>
     /// SDL rate applied
     /// </summary>
     public decimal Rate { get; init; }
-    
+
     /// <summary>
     /// Company's total annual payroll
     /// </summary>
     public decimal AnnualPayroll { get; init; }
-    
+
     /// <summary>
     /// SDL exemption threshold
     /// </summary>
@@ -42,22 +42,22 @@ public class SdlBulkContribution
     /// Total annual payroll
     /// </summary>
     public decimal TotalPayroll { get; init; }
-    
+
     /// <summary>
     /// Total SDL amount
     /// </summary>
     public decimal TotalSdl { get; init; }
-    
+
     /// <summary>
     /// Indicates whether the company is exempt
     /// </summary>
     public bool IsExempt { get; init; }
-    
+
     /// <summary>
     /// Number of employees
     /// </summary>
     public int EmployeeCount { get; init; }
-    
+
     /// <summary>
     /// Individual SDL contributions
     /// </summary>
@@ -73,7 +73,7 @@ public class IndividualSdlContribution
     /// Employee's annual salary
     /// </summary>
     public decimal AnnualSalary { get; init; }
-    
+
     /// <summary>
     /// SDL amount for this employee
     /// </summary>

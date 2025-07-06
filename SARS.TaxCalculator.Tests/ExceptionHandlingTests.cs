@@ -27,44 +27,44 @@ public class ExceptionHandlingTests
     [Fact]
     public void TaxCalculator_InvalidMedicalAidMembers_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithMedicalAid(-1));
-        
-        Assert.Throws<ArgumentException>(() => 
+
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithMedicalAid(0));
     }
 
     [Fact]
     public void TaxCalculator_InvalidRetirementPercentage_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithRetirementContribution(-0.1m));
-        
-        Assert.Throws<ArgumentException>(() => 
+
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithRetirementContribution(1.1m));
     }
 
     [Fact]
     public void TaxCalculator_InvalidRetirementAmount_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithRetirementContributionAmount(-1000));
     }
 
     [Fact]
     public void TaxCalculator_InvalidCompanyPayroll_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithCompanyPayroll(-100000));
     }
 
     [Fact]
     public void TaxCalculator_InvalidAge_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithAge(-1));
-        
-        Assert.Throws<ArgumentException>(() => 
+
+        Assert.Throws<ArgumentException>(() =>
             TaxCalculator.ForTaxYear(2024).WithAge(151));
     }
 
@@ -101,7 +101,7 @@ public class ExceptionHandlingTests
         var calculator = new SdlCalculator(config.SdlConfig);
 
         var result = calculator.CalculateBulk(new List<decimal>());
-        
+
         Assert.NotNull(result);
         Assert.Equal(0, result.TotalPayroll);
         Assert.Equal(0, result.TotalSdl);
@@ -115,10 +115,10 @@ public class ExceptionHandlingTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new PayeCalculator(config);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(100000, -5));
-        
-        Assert.Throws<ArgumentException>(() => 
+
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(100000, 200));
     }
 
@@ -128,10 +128,10 @@ public class ExceptionHandlingTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new PayeCalculator(config);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(-50000, 30));
-        
-        Assert.Throws<ArgumentException>(() => 
+
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateMonthlyPaye(-5000, 30));
     }
 
@@ -141,10 +141,10 @@ public class ExceptionHandlingTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new PayeCalculator(config);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(100000, 30, -2));
-        
-        Assert.Throws<ArgumentException>(() => 
+
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateMonthlyPaye(10000, 30, -1));
     }
 
@@ -190,7 +190,7 @@ public class ExceptionHandlingTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new SdlCalculator(config.SdlConfig);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateMonthly(-1000, 1000000));
     }
 
@@ -200,7 +200,7 @@ public class ExceptionHandlingTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new SdlCalculator(config.SdlConfig);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateMonthly(10000, -500000));
     }
 }

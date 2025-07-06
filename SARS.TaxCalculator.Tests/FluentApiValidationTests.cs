@@ -186,7 +186,7 @@ public class FluentApiValidationTests
     public void SupportedYears_ReturnsExpectedYears()
     {
         var supportedYears = TaxCalculator.SupportedYears.ToArray();
-        
+
         Assert.Contains(2023, supportedYears);
         Assert.Contains(2024, supportedYears);
         Assert.Contains(2025, supportedYears);
@@ -236,7 +236,7 @@ public class FluentApiValidationTests
         Assert.True(result.MonthlyPAYE >= 0);
         Assert.True(result.AnnualPAYE >= 0);
         // Monthly PAYE * 12 may differ slightly from Annual PAYE due to rounding
-        Assert.True(Math.Abs(result.MonthlyPAYE * 12 - result.AnnualPAYE) <= 0.12m, 
+        Assert.True(Math.Abs(result.MonthlyPAYE * 12 - result.AnnualPAYE) <= 0.12m,
             $"Monthly PAYE * 12 ({result.MonthlyPAYE * 12}) should be within 12 cents of Annual PAYE ({result.AnnualPAYE})");
         Assert.True(result.TaxableIncome > 0);
         Assert.True(result.TaxThreshold > 0);

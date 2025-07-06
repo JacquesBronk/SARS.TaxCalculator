@@ -24,7 +24,7 @@ public class CalculatorEdgeCaseTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new PayeCalculator(config);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(negativeIncome, 35));
     }
 
@@ -37,7 +37,7 @@ public class CalculatorEdgeCaseTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new PayeCalculator(config);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(100000, invalidAge));
     }
 
@@ -49,7 +49,7 @@ public class CalculatorEdgeCaseTests
         var config = TaxYearData.GetConfiguration(2024);
         var calculator = new PayeCalculator(config);
 
-        Assert.Throws<ArgumentException>(() => 
+        Assert.Throws<ArgumentException>(() =>
             calculator.CalculateAnnualPaye(100000, 35, negativeMembers));
     }
 
@@ -250,24 +250,24 @@ public class CalculatorEdgeCaseTests
         var calculator = new EtiCalculator(config.EtiConfig);
 
         // Exactly 24 months - should be ineligible for non-first-time
-        var employee24Months = new EtiEmployee 
-        { 
-            Age = 25, 
-            MonthlySalary = 3000, 
-            EmploymentMonths = 24, 
-            IsFirstTimeEmployee = false 
+        var employee24Months = new EtiEmployee
+        {
+            Age = 25,
+            MonthlySalary = 3000,
+            EmploymentMonths = 24,
+            IsFirstTimeEmployee = false
         };
         var result24 = calculator.CalculateMonthly(employee24Months);
         Assert.False(result24.IsEligible);
         Assert.Contains("ETI period has expired", result24.IneligibilityReason);
 
         // 23 months - should be eligible for non-first-time
-        var employee23Months = new EtiEmployee 
-        { 
-            Age = 25, 
-            MonthlySalary = 3000, 
-            EmploymentMonths = 23, 
-            IsFirstTimeEmployee = false 
+        var employee23Months = new EtiEmployee
+        {
+            Age = 25,
+            MonthlySalary = 3000,
+            EmploymentMonths = 23,
+            IsFirstTimeEmployee = false
         };
         var result23 = calculator.CalculateMonthly(employee23Months);
         Assert.True(result23.IsEligible);

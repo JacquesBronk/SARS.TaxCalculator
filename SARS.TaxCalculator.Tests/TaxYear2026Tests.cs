@@ -18,7 +18,7 @@ public class TaxYear2026Tests
     public void TaxYear2026Configuration_ValidValues_CorrectDates()
     {
         var config = TaxYearData.GetConfiguration(2026);
-        
+
         Assert.Equal(2026, config.Year);
         Assert.Equal(new DateTime(2025, 3, 1), config.StartDate);
         Assert.Equal(new DateTime(2026, 2, 28), config.EndDate);
@@ -51,14 +51,14 @@ public class TaxYear2026Tests
     {
         var config2026 = TaxYearData.GetConfiguration(2026);
         var config2025 = TaxYearData.GetConfiguration(2025);
-        
+
         Assert.Equal(config2025.TaxBrackets.Count, config2026.TaxBrackets.Count);
-        
+
         for (int i = 0; i < config2025.TaxBrackets.Count; i++)
         {
             var bracket2025 = config2025.TaxBrackets[i];
             var bracket2026 = config2026.TaxBrackets[i];
-            
+
             Assert.Equal(bracket2025.MinIncome, bracket2026.MinIncome);
             Assert.Equal(bracket2025.MaxIncome, bracket2026.MaxIncome);
             Assert.Equal(bracket2025.Rate, bracket2026.Rate);
@@ -71,14 +71,14 @@ public class TaxYear2026Tests
     {
         var config2026 = TaxYearData.GetConfiguration(2026);
         var config2025 = TaxYearData.GetConfiguration(2025);
-        
+
         Assert.Equal(config2025.TaxRebates.Count, config2026.TaxRebates.Count);
-        
+
         for (int i = 0; i < config2025.TaxRebates.Count; i++)
         {
             var rebate2025 = config2025.TaxRebates[i];
             var rebate2026 = config2026.TaxRebates[i];
-            
+
             Assert.Equal(rebate2025.Amount, rebate2026.Amount);
             Assert.Equal(rebate2025.MinAge, rebate2026.MinAge);
             Assert.Equal(rebate2025.Type, rebate2026.Type);
@@ -90,7 +90,7 @@ public class TaxYear2026Tests
     {
         var config2026 = TaxYearData.GetConfiguration(2026);
         var config2025 = TaxYearData.GetConfiguration(2025);
-        
+
         Assert.Equal(config2025.EtiConfig.MinAge, config2026.EtiConfig.MinAge);
         Assert.Equal(config2025.EtiConfig.MaxAge, config2026.EtiConfig.MaxAge);
         Assert.Equal(config2025.EtiConfig.MaxQualifyingSalary, config2026.EtiConfig.MaxQualifyingSalary);

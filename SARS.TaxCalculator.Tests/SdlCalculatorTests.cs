@@ -30,7 +30,7 @@ public class SdlCalculatorTests
         decimal monthlyIncome, decimal annualPayroll, decimal expectedSdl)
     {
         var result = _calculator.CalculateMonthly(monthlyIncome, annualPayroll);
-        
+
         Assert.Equal(expectedSdl, result.Amount);
         Assert.Equal(annualPayroll <= 500000, result.IsExempt);
     }
@@ -43,7 +43,7 @@ public class SdlCalculatorTests
         decimal annualIncome, decimal annualPayroll, decimal expectedSdl)
     {
         var result = _calculator.CalculateAnnual(annualIncome, annualPayroll);
-        
+
         Assert.Equal(expectedSdl, result.Amount);
     }
 
@@ -74,15 +74,15 @@ public class SdlCalculatorTests
     public void CalculateBulk_MultipleEmployees_ReturnsCorrectTotals()
     {
         var salaries = new[] { 120000m, 240000m, 360000m, 480000m }; // Total: 1,200,000
-        
+
         var result = _calculator.CalculateBulk(salaries);
-        
+
         Assert.Equal(1200000, result.TotalPayroll);
         Assert.Equal(12000, result.TotalSdl); // 1% of total
         Assert.False(result.IsExempt);
         Assert.Equal(4, result.EmployeeCount);
         Assert.Equal(4, result.IndividualContributions.Count);
-        
+
         // Verify individual contributions
         Assert.Equal(1200, result.IndividualContributions[0].SdlAmount);
         Assert.Equal(2400, result.IndividualContributions[1].SdlAmount);
@@ -92,9 +92,9 @@ public class SdlCalculatorTests
     public void CalculateBulk_BelowThreshold_AllExempt()
     {
         var salaries = new[] { 100000m, 150000m, 200000m }; // Total: 450,000
-        
+
         var result = _calculator.CalculateBulk(salaries);
-        
+
         Assert.Equal(450000, result.TotalPayroll);
         Assert.Equal(0, result.TotalSdl);
         Assert.True(result.IsExempt);
@@ -104,7 +104,7 @@ public class SdlCalculatorTests
     [Fact]
     public void CalculateMonthly_NegativeIncome_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateMonthly(-1000, 1000000));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -112,7 +112,7 @@ public class SdlCalculatorTests
     [Fact]
     public void CalculateMonthly_NegativePayroll_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateMonthly(10000, -1000000));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -127,8 +127,8 @@ public class SdlCalculatorTests
     public void CalculateBulk_NegativeSalary_ThrowsException()
     {
         var salaries = new[] { 100000m, -50000m, 200000m };
-        
-        var exception = Assert.Throws<ArgumentException>(() => 
+
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateBulk(salaries));
         Assert.Contains("cannot be negative", exception.Message);
     }

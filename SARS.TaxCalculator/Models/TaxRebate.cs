@@ -9,12 +9,12 @@ public enum RebateType
     /// Primary rebate for all taxpayers
     /// </summary>
     Primary,
-    
+
     /// <summary>
     /// Secondary rebate for taxpayers 65 years and older
     /// </summary>
     Secondary,
-    
+
     /// <summary>
     /// Tertiary rebate for taxpayers 75 years and older
     /// </summary>
@@ -30,12 +30,12 @@ public class TaxRebate
     /// The type of rebate
     /// </summary>
     public RebateType Type { get; init; }
-    
+
     /// <summary>
     /// The annual rebate amount
     /// </summary>
     public decimal Amount { get; init; }
-    
+
     /// <summary>
     /// Minimum age requirement for this rebate (null for no requirement)
     /// </summary>

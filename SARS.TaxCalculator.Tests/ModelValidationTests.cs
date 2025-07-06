@@ -116,12 +116,12 @@ public class ModelValidationTests
     [Fact]
     public void TaxBracket_CalculateTax_IncomeBelowMinimum_ReturnsZero()
     {
-        var bracket = new TaxBracket 
-        { 
-            MinIncome = 237101, 
-            MaxIncome = 370500, 
-            BaseTax = 42678, 
-            Rate = 26 
+        var bracket = new TaxBracket
+        {
+            MinIncome = 237101,
+            MaxIncome = 370500,
+            BaseTax = 42678,
+            Rate = 26
         };
 
         Assert.Equal(0m, bracket.CalculateTax(0));
@@ -132,12 +132,12 @@ public class ModelValidationTests
     [Fact]
     public void TaxBracket_CalculateTax_ExactBoundaries_ReturnsCorrectTax()
     {
-        var bracket = new TaxBracket 
-        { 
-            MinIncome = 237101, 
-            MaxIncome = 370500, 
-            BaseTax = 42678, 
-            Rate = 26 
+        var bracket = new TaxBracket
+        {
+            MinIncome = 237101,
+            MaxIncome = 370500,
+            BaseTax = 42678,
+            Rate = 26
         };
 
         // Exact minimum - should return base tax only
@@ -154,12 +154,12 @@ public class ModelValidationTests
     [Fact]
     public void TaxBracket_CalculateTax_TopBracketNoMaximum_CalculatesCorrectly()
     {
-        var topBracket = new TaxBracket 
-        { 
-            MinIncome = 1817001, 
-            MaxIncome = null, 
-            BaseTax = 644489, 
-            Rate = 45 
+        var topBracket = new TaxBracket
+        {
+            MinIncome = 1817001,
+            MaxIncome = null,
+            BaseTax = 644489,
+            Rate = 45
         };
 
         // Test at minimum
@@ -177,12 +177,12 @@ public class ModelValidationTests
     [Fact]
     public void TaxBracket_CalculateTax_FirstBracket_NoBaseTax()
     {
-        var firstBracket = new TaxBracket 
-        { 
-            MinIncome = 0, 
-            MaxIncome = 237100, 
-            BaseTax = 0, 
-            Rate = 18 
+        var firstBracket = new TaxBracket
+        {
+            MinIncome = 0,
+            MaxIncome = 237100,
+            BaseTax = 0,
+            Rate = 18
         };
 
         // Test at zero

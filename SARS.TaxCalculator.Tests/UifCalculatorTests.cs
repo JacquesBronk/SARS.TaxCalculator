@@ -31,7 +31,7 @@ public class UifCalculatorTests
         decimal monthlyIncome, decimal expectedEmployee, decimal expectedEmployer, decimal expectedTotal)
     {
         var result = _calculator.CalculateMonthly(monthlyIncome);
-        
+
         Assert.Equal(expectedEmployee, result.EmployeeAmount);
         Assert.Equal(expectedEmployer, result.EmployerAmount);
         Assert.Equal(expectedTotal, result.TotalAmount);
@@ -58,7 +58,7 @@ public class UifCalculatorTests
         decimal annualIncome, decimal expectedEmployee, decimal expectedEmployer, decimal expectedTotal)
     {
         var result = _calculator.CalculateAnnual(annualIncome);
-        
+
         Assert.Equal(expectedEmployee, result.EmployeeAmount);
         Assert.Equal(expectedEmployer, result.EmployerAmount);
         Assert.Equal(expectedTotal, result.TotalAmount);
@@ -82,7 +82,7 @@ public class UifCalculatorTests
     public void GetMaximumMonthlyContribution_ReturnsCorrectAmount()
     {
         var result = _calculator.GetMaximumMonthlyContribution();
-        
+
         Assert.Equal(177.12m, result.EmployeeAmount);
         Assert.Equal(177.12m, result.EmployerAmount);
         Assert.Equal(354.24m, result.TotalAmount);
@@ -93,7 +93,7 @@ public class UifCalculatorTests
     [Fact]
     public void CalculateMonthly_NegativeIncome_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateMonthly(-1000));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -101,7 +101,7 @@ public class UifCalculatorTests
     [Fact]
     public void CalculateAnnual_NegativeIncome_ThrowsException()
     {
-        var exception = Assert.Throws<ArgumentException>(() => 
+        var exception = Assert.Throws<ArgumentException>(() =>
             _calculator.CalculateAnnual(-10000));
         Assert.Contains("cannot be negative", exception.Message);
     }
@@ -113,7 +113,7 @@ public class UifCalculatorTests
     public void CalculateMonthly_RoundsToTwoCents(decimal income, decimal expectedEmployee, decimal expectedEmployer)
     {
         var result = _calculator.CalculateMonthly(income);
-        
+
         Assert.Equal(expectedEmployee, result.EmployeeAmount);
         Assert.Equal(expectedEmployer, result.EmployerAmount);
     }
