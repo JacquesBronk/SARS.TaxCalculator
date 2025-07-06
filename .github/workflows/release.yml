@@ -11,6 +11,10 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write  # For creating releases
+  packages: write  # For publishing packages
+  
 env:
   DOTNET_VERSION: '8.0.x'
   PROJECT_PATH: 'SARS.TaxCalculator/SARS.TaxCalculator.csproj'
@@ -19,6 +23,8 @@ jobs:
   validate:
     name: Validate Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -70,6 +76,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
     environment: production
+    permissions:
+      contents: read
+      packages: write
     
     steps:
     - name: Checkout code
@@ -100,6 +109,8 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     needs: [validate, publish-nuget]
+    permissions:
+      contents: write  # Required for creating releases
     
     steps:
     - name: Checkout code
