@@ -134,24 +134,21 @@ jobs:
         fi
         
         if [[ -z "$RELEASE_NOTES" ]]; then
-          RELEASE_NOTES=$(cat <<EOF
-## Release $VERSION
+          RELEASE_NOTES="## Release $VERSION
 
-### Changes
-- Updated to version $VERSION
-- Full SARS compliance verification
-- 98.63% test coverage with 283 comprehensive tests
-- Support for tax years 2023-2026
+        ### Changes
+        - Updated to version $VERSION
+        - Full SARS compliance verification
+        - 98.63% test coverage with 283 comprehensive tests
+        - Support for tax years 2023-2026
 
-### Installation
-\`\`\`bash
-dotnet add package SARS.TaxCalculator --version $VERSION
-\`\`\`
+        ### Installation
+        \`\`\`bash
+        dotnet add package SARS.TaxCalculator --version $VERSION
+        \`\`\`
 
-### Verification
-All calculations have been verified against official SARS documentation and tax tables.
-EOF
-)
+        ### Verification
+        All calculations have been verified against official SARS documentation and tax tables."
         fi
         
         # Save to file for the release step
