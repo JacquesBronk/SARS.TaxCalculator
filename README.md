@@ -1,12 +1,12 @@
 # SARS.TaxCalculator
 
-A comprehensive South African SARS tax calculation NuGet package supporting PAYE, UIF, SDL, ETI and complete payslip calculations for tax years 2023-2026.
+A comprehensive South African SARS tax calculation NuGet package supporting PAYE, UIF, SDL, ETI and complete payslip calculations for tax years 2023-2027.
 
 [![NuGet](https://img.shields.io/nuget/v/SARS.TaxCalculator.svg)](https://www.nuget.org/packages/SARS.TaxCalculator/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![SARS Compliant](https://img.shields.io/badge/SARS-Compliant-green.svg)](https://www.sars.gov.za)
-[![Test Coverage](https://img.shields.io/badge/Coverage-98.68%25-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
-[![Tests](https://img.shields.io/badge/Tests-295%20Passing-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
+[![Test Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
+[![Tests](https://img.shields.io/badge/Tests-416%20Passing-brightgreen.svg)](https://github.com/JacquesBronk/SARS.TaxCalculator)
 
 ## Features
 
@@ -14,15 +14,16 @@ A comprehensive South African SARS tax calculation NuGet package supporting PAYE
 - ✅ **UIF Calculation** - Employee and employer contributions with R17,712 monthly ceiling
 - ✅ **SDL Calculation** - Skills Development Levy with R500,000 annual exemption
 - ✅ **ETI Calculation** - Employment Tax Incentive with April 2025 changes (R2,500 max, hours proration)
-- ✅ **Medical Aid Credits** - R364 main/first dependent, R246 additional dependents
-- ✅ **Retirement Deductions** - Max 27.5% of taxable income, R350,000 annual cap
+- ✅ **Medical Aid Credits** - R376 main/first dependent, R254 additional dependents (2027)
+- ✅ **Retirement Deductions** - Max 27.5% of taxable income, R430,000 annual cap (2027)
 - ✅ **Complete Payslips** - Full gross-to-net calculations
 - ✅ **Fluent API** - Intuitive, chainable interface
-- ✅ **Multi-year Support** - Tax years 2023, 2024, 2025, and 2026
+- ✅ **Multi-year Support** - Tax years 2023, 2024, 2025, 2026, and 2027
 - ✅ **SARS Compliant** - Fully compliant with official SARS legislation and rounding rules
-- ✅ **Comprehensive Testing** - 98.68% line coverage with 295 passing tests
+- ✅ **Date-Aware ETI** - Handles mid-year ETI rate changes (e.g., March vs April 2025)
+- ✅ **Comprehensive Testing** - 100% line coverage with 416 passing tests
 - ✅ **Bulk Processing** - Calculate multiple employees efficiently
-- ✅ **.NET Standard 2.1** - Compatible with .NET Core 3.0+, .NET 5+, and .NET Framework 4.8+
+- ✅ **.NET Standard 2.1** - Compatible with .NET Core 3.0+, .NET 5+, .NET 8+, and .NET Framework 4.8+
 
 ## Installation
 
@@ -41,7 +42,7 @@ Install-Package SARS.TaxCalculator
 using SARS.TaxCalculator;
 
 var result = TaxCalculator
-    .ForTaxYear(2026)
+    .ForTaxYear(2027)
     .WithGrossSalary(25000)
     .WithAge(35)
     .WithMedicalAid(3, 3500)
@@ -52,28 +53,30 @@ Console.WriteLine($"Monthly PAYE: R{result.PAYE:N2}");
 Console.WriteLine($"Net Salary: R{result.NetSalary:N2}");
 ```
 
-## Tax Tables (2024-2026)
+## Tax Tables (2027)
 
 ### Income Tax Brackets
 | Annual Income | Tax Rate |
 |--------------|----------|
-| R0 - R237,100 | 18% |
-| R237,101 - R370,500 | R42,678 + 26% |
-| R370,501 - R512,800 | R77,362 + 31% |
-| R512,801 - R673,000 | R121,475 + 36% |
-| R673,001 - R857,900 | R179,147 + 39% |
-| R857,901 - R1,817,000 | R251,258 + 41% |
-| R1,817,001+ | R644,489 + 45% |
+| R0 - R245,100 | 18% |
+| R245,101 - R383,100 | R44,118 + 26% |
+| R383,101 - R530,200 | R79,998 + 31% |
+| R530,201 - R695,800 | R125,599 + 36% |
+| R695,801 - R887,000 | R185,215 + 39% |
+| R887,001 - R1,878,600 | R259,783 + 41% |
+| R1,878,601+ | R666,339 + 45% |
+
+*Source: [SARS Tax Rates for Individuals](https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/) - Published 25 February 2026*
 
 ### Tax Rebates
-- Primary (all ages): R17,235
-- Secondary (65+): R9,444
-- Tertiary (75+): R3,145
+- Primary (all ages): R17,820
+- Secondary (65+): R9,765
+- Tertiary (75+): R3,249
 
 ### Tax Thresholds
-- Under 65: R95,750
-- 65-74: R148,217
-- 75+: R165,689
+- Under 65: R99,000
+- 65-74: R153,250
+- 75+: R171,300
 
 ## Detailed Examples
 
@@ -81,7 +84,7 @@ Console.WriteLine($"Net Salary: R{result.NetSalary:N2}");
 
 ```csharp
 var result = TaxCalculator
-    .ForTaxYear(2026)
+    .ForTaxYear(2027)
     .WithGrossSalary(30000)
     .WithAge(40)
     .Calculate();
@@ -95,7 +98,7 @@ decimal netSalary = result.NetSalary;
 
 ```csharp
 var result = TaxCalculator
-    .ForTaxYear(2026)
+    .ForTaxYear(2027)
     .WithGrossSalary(45000)
     .WithAge(35)
     .WithMedicalAid(4, 5000)  // 4 members, R5000/month contribution
@@ -107,7 +110,7 @@ var result = TaxCalculator
 
 ```csharp
 var result = TaxCalculator
-    .ForTaxYear(2026)
+    .ForTaxYear(2027)
     .WithGrossSalary(3500)
     .WithAge(22)
     .WithEtiDetails(
@@ -119,10 +122,36 @@ var result = TaxCalculator
 decimal etiAmount = result.ETI;  // Employment Tax Incentive
 ```
 
+### Date-Aware ETI (Mid-Year Rate Changes)
+
+The 2026 tax year spans a mid-year ETI rate change effective 1 April 2025. Use `ForPaymentDate()` to get the correct ETI rates for a specific payroll month:
+
+```csharp
+// March 2025: OLD ETI rates (max salary R6,500)
+var marchResult = TaxCalculator
+    .ForTaxYear(2026)
+    .WithGrossSalary(7000)
+    .WithAge(22)
+    .WithEtiDetails(employmentMonths: 6)
+    .ForPaymentDate(3, 2025)
+    .Calculate();
+// marchResult.ETI == 0 (R7,000 exceeds old R6,500 threshold)
+
+// April 2025: NEW ETI rates (max salary R7,500)
+var aprilResult = TaxCalculator
+    .ForTaxYear(2026)
+    .WithGrossSalary(7000)
+    .WithAge(22)
+    .WithEtiDetails(employmentMonths: 6)
+    .ForPaymentDate(4, 2025)
+    .Calculate();
+// aprilResult.ETI == 375 (eligible under new R7,500 threshold)
+```
+
 ### Complete Payslip
 
 ```csharp
-var config = TaxYearData.GetConfiguration(2026);
+var config = TaxYearData.GetConfiguration(2027);
 var calculator = new PayslipCalculator(config);
 
 var payslip = calculator.Calculate(new PayslipInput
@@ -173,6 +202,7 @@ TaxCalculator
     .WithRetirementContributionAmount(decimal amount)
     .WithCompanyPayroll(decimal annualPayroll)
     .WithEtiDetails(int months, bool firstTime, bool inSez)
+    .ForPaymentDate(int month, int year)
     .Calculate()
     .CalculatePaye()
 ```
@@ -202,11 +232,12 @@ TaxCalculator
 - 2024 (1 March 2023 - 29 February 2024)
 - 2025 (1 March 2024 - 28 February 2025)
 - 2026 (1 March 2025 - 28 February 2026)
+- 2027 (1 March 2026 - 28 February 2027)
 
 ### Key Limits
 - UIF Monthly Ceiling: R17,712
 - SDL Exemption: R500,000 annual payroll
-- Retirement Deduction: 27.5% of income, max R350,000/year
+- Retirement Deduction: 27.5% of income, max R430,000/year (2027)
 - ETI Maximum: R2,500/month (first year), R1,250/month (second year) for 160+ hours
 - ETI Salary Threshold: R7,500/month (effective April 2025)
 - ETI Age Range: 18-29 (except SEZ employees)
@@ -224,8 +255,10 @@ This package is **fully compliant** with South African Revenue Service (SARS) le
 
 ### 📋 **SARS Sources & Citations**
 - [SARS Tax Rates for Individuals](https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/)
+- [SARS Medical Tax Credit Rates](https://www.sars.gov.za/tax-rates/medical-tax-credit-rates/)
 - [Employment Tax Incentive Guidelines](https://www.sars.gov.za/types-of-tax/pay-as-you-earn/employment-tax-incentive-eti/)
 - [SARS Validation Rules 2025](https://www.sars.gov.za/guide-for-validation-rules-applicable-to-reconciliation-declarations-2025/)
+- [2026 Budget Speech](https://www.gov.za/2026BudgetSpeech)
 - Fourth Schedule to Income Tax Act, 1962
 - Employment Tax Incentive Act, 2013
 
@@ -243,9 +276,10 @@ For detailed compliance documentation, see [SARS_COMPLIANCE_REVIEW.md](SARS_COMP
 The package includes **comprehensive test coverage** ensuring reliability and correctness:
 
 ### 📊 **Test Coverage Metrics**
-- **Line Coverage: 98.63%** (1008 out of 1022 lines)
-- **Branch Coverage: 90.58%** (154 out of 170 branches)
-- **Total Tests: 283** across all components
+- **Line Coverage: 100%** (1209 out of 1209 lines)
+- **Branch Coverage: 98.5%** (203 out of 206 branches)
+- **Method Coverage: 100%** (235 out of 235 methods)
+- **Total Tests: 416** across all components
 
 ### 🧪 **Testing Categories**
 - **Unit Tests**: All core calculation logic
@@ -260,6 +294,7 @@ The package includes **comprehensive test coverage** ensuring reliability and co
 - ✅ UIF ceiling application and rounding validation
 - ✅ SDL exemption thresholds and payroll scenarios
 - ✅ ETI eligibility matrix (age, salary, employment duration, SEZ)
+- ✅ Date-aware ETI resolution (mid-year rate changes, old vs new rates)
 - ✅ Medical aid credit calculations for all member configurations
 - ✅ Retirement contribution limits and deduction rules
 - ✅ Tax threshold applications for different age groups

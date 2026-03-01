@@ -25,6 +25,7 @@ This document provides comprehensive information about the testing strategy, cov
 | `TaxBracketTests.cs` | Tax bracket calculations | 16 |
 | `MedicalAidCreditTests.cs` | Medical aid credits | 14 |
 | `TaxYear2026Tests.cs` | 2026 tax year specific tests | 20 |
+| `TaxYear2027Tests.cs` | 2027 tax year specific tests | 38 |
 
 ### Edge Case & Quality Test Files
 
@@ -48,7 +49,7 @@ This document provides comprehensive information about the testing strategy, cov
 ### 2. Integration Tests (End-to-End)
 - **Fluent API Workflows**: Complete tax calculation chains
 - **Multi-component Calculations**: PAYE + UIF + SDL + ETI scenarios
-- **Cross-tax-year Consistency**: Behavior across supported years (2023-2026)
+- **Cross-tax-year Consistency**: Behavior across supported years (2023-2027)
 - **Payslip Generation**: Complete gross-to-net calculations
 
 ### 3. Edge Case Tests (Boundary Conditions)

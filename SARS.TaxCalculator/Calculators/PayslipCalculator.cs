@@ -17,7 +17,6 @@ public class PayslipCalculator
     private readonly PayeCalculator _payeCalculator;
     private readonly UifCalculator _uifCalculator;
     private readonly SdlCalculator _sdlCalculator;
-    private readonly EtiCalculator _etiCalculator;
 
     /// <summary>
     /// Initializes a new instance of the payslip calculator
@@ -29,7 +28,6 @@ public class PayslipCalculator
         _payeCalculator = new PayeCalculator(config);
         _uifCalculator = new UifCalculator(config.UifConfig);
         _sdlCalculator = new SdlCalculator(config.SdlConfig);
-        _etiCalculator = new EtiCalculator(config.EtiConfig);
     }
 
     /// <summary>
@@ -190,7 +188,11 @@ public class PayslipCalculator
             WorksInSpecialEconomicZone = input.WorksInSpecialEconomicZone
         };
 
-        var result = _etiCalculator.CalculateMonthly(etiEmployee);
+        var etiConfig = (input.PayMonth > 0 && input.PayYear > 0)
+            ? _config.GetEtiConfigForDate(input.PayMonth, input.PayYear)
+            : _config.EtiConfig;
+        var etiCalculator = new EtiCalculator(etiConfig);
+        var result = etiCalculator.CalculateMonthly(etiEmployee);
 
         return new EtiInfo
         {

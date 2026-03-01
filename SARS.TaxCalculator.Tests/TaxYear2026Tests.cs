@@ -99,9 +99,45 @@ public class TaxYear2026Tests
         Assert.Equal(7500, config2026.EtiConfig.MaxQualifyingSalary); // Increased from 6500
         Assert.Equal(4, config2026.EtiConfig.Bands.Count);
 
-        // Verify new maximum ETI amounts
+        // Verify ETI Band 1 amounts match Section 8 legislative cap (R2,500/R1,250)
         var band1 = config2026.EtiConfig.Bands[0];
-        Assert.Equal(2500, band1.FirstYearAmount); // Increased from 1500
-        Assert.Equal(1250, band1.SecondYearAmount); // Increased from 750
+        Assert.Equal(2500, band1.FirstYearAmount);
+        Assert.Equal(1250, band1.SecondYearAmount);
+    }
+
+    [Fact]
+    public void TaxYear2026_EtiConfigPeriods_HasTwoPeriods()
+    {
+        var config = TaxYearData.GetConfiguration(2026);
+
+        Assert.NotNull(config.EtiConfigPeriods);
+        Assert.Equal(2, config.EtiConfigPeriods!.Count);
+    }
+
+    [Fact]
+    public void TaxYear2026_EtiConfigPeriods_Period1_OldRates()
+    {
+        var config = TaxYearData.GetConfiguration(2026);
+        var period1 = config.EtiConfigPeriods![0];
+
+        Assert.Equal(new DateTime(2025, 3, 1), period1.EffectiveFrom);
+        Assert.Equal(6500, period1.Config.MaxQualifyingSalary);
+        Assert.Equal(4, period1.Config.Bands.Count);
+        Assert.Equal(2000, period1.Config.Bands[0].MaxSalary);
+        Assert.Equal(1500, period1.Config.Bands[0].FirstYearAmount);
+    }
+
+    [Fact]
+    public void TaxYear2026_EtiConfigPeriods_Period2_NewRates()
+    {
+        var config = TaxYearData.GetConfiguration(2026);
+        var period2 = config.EtiConfigPeriods![1];
+
+        Assert.Equal(new DateTime(2025, 4, 1), period2.EffectiveFrom);
+        Assert.Equal(7500, period2.Config.MaxQualifyingSalary);
+        Assert.Equal(4, period2.Config.Bands.Count);
+        Assert.Equal(2499.99m, period2.Config.Bands[0].MaxSalary);
+        Assert.Equal(2500, period2.Config.Bands[0].FirstYearAmount);
+        Assert.True(period2.Config.Bands[0].UseRemunerationPercentage);
     }
 }

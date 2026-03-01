@@ -125,7 +125,7 @@ public class TaxCalculatorFluentApiTests
         Assert.Equal(540000, result.TaxableIncome); // 600000 - 60000 retirement
         Assert.Equal(95750, result.TaxThreshold);
         Assert.Equal(17235, result.TotalRebates);
-        Assert.Equal(105295.64m, result.AnnualPAYE); // Updated to correct calculated value
+        Assert.Equal(105296m, result.AnnualPAYE); // SARS formula: 121,475 + 36% × (540,000 - 512,800) - 17,235 - 8,736
     }
 
     [Theory]
@@ -151,11 +151,12 @@ public class TaxCalculatorFluentApiTests
     public void SupportedYears_ReturnsCorrectYears()
     {
         var years = TaxCalculator.SupportedYears;
-        Assert.Equal(4, years.Count());
+        Assert.Equal(5, years.Count());
         Assert.Contains(2023, years);
         Assert.Contains(2024, years);
         Assert.Contains(2025, years);
         Assert.Contains(2026, years);
+        Assert.Contains(2027, years);
     }
 
     [Theory]

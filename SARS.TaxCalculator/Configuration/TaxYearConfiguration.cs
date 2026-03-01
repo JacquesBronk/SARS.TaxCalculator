@@ -55,9 +55,36 @@ public class TaxYearConfiguration
     public SdlConfiguration SdlConfig { get; init; } = new();
 
     /// <summary>
-    /// ETI configuration
+    /// ETI configuration (default rates for the year)
     /// </summary>
     public EtiConfiguration EtiConfig { get; init; } = new();
+
+    /// <summary>
+    /// Optional date-specific ETI configurations for mid-year rate changes.
+    /// Must be ordered by EffectiveFrom date ascending.
+    /// </summary>
+    public IReadOnlyList<DatedEtiConfiguration>? EtiConfigPeriods { get; init; }
+
+    /// <summary>
+    /// Gets the applicable ETI configuration for a specific pay month/year.
+    /// Falls back to EtiConfig if no periods are defined or none match.
+    /// </summary>
+    public EtiConfiguration GetEtiConfigForDate(int payMonth, int payYear)
+    {
+        if (EtiConfigPeriods == null || EtiConfigPeriods.Count == 0)
+            return EtiConfig;
+
+        var payDate = new DateTime(payYear, payMonth, 1);
+        EtiConfiguration? applicable = null;
+
+        foreach (var period in EtiConfigPeriods)
+        {
+            if (payDate >= period.EffectiveFrom)
+                applicable = period.Config;
+        }
+
+        return applicable ?? EtiConfig;
+    }
 
     /// <summary>
     /// Retirement contribution limits
@@ -162,6 +189,27 @@ public class EtiBand
     /// Reduction rate for salaries above minimum (if applicable)
     /// </summary>
     public decimal? ReductionRate { get; init; }
+
+    /// <summary>
+    /// When true, ETI is calculated as a percentage of remuneration (60%/30%) capped at FirstYearAmount/SecondYearAmount
+    /// </summary>
+    public bool UseRemunerationPercentage { get; init; }
+}
+
+/// <summary>
+/// Represents an ETI configuration that applies from a specific date
+/// </summary>
+public class DatedEtiConfiguration
+{
+    /// <summary>
+    /// The date from which this ETI configuration applies
+    /// </summary>
+    public DateTime EffectiveFrom { get; init; }
+
+    /// <summary>
+    /// The ETI configuration for this period
+    /// </summary>
+    public EtiConfiguration Config { get; init; } = new();
 }
 
 /// <summary>

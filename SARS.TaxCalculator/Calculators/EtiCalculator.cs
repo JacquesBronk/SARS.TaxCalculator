@@ -14,7 +14,7 @@ namespace SARS.TaxCalculator.Calculators;
 /// Reference: https://www.sars.gov.za/types-of-tax/pay-as-you-earn/employment-tax-incentive-eti/
 /// Guide: SARS Guide to the Employment Tax Incentive (LAPD-ETI-G01)
 /// Changes effective 1 April 2025: https://www.sars.gov.za/latest-news/employment-tax-incentive-eti-changes-with-effect-from-1-april-2025/
-/// Key changes: Maximum ETI R2,500 (160+ hours), R7,500 salary threshold, proration for less than 160 hours
+/// Key changes: Section 8 cap R2,500/R1,250 (160+ hours), R7,500 salary threshold, proration for less than 160 hours
 /// </summary>
 public class EtiCalculator
 {
@@ -143,9 +143,9 @@ public class EtiCalculator
         var isFirstYear = employee.EmploymentMonths < 12;
         var baseAmount = isFirstYear ? band.FirstYearAmount : band.SecondYearAmount;
 
-        // Special handling for Band 1 (R0 - R2,499.99) - 60%/30% of remuneration
+        // Special handling for percentage-based bands (e.g., Band 1: 60%/30% of remuneration)
         // Source: Employment Tax Incentive Act - Section 7(2)
-        if (band.MinSalary == 0 && band.MaxSalary == 2499.99m)
+        if (band.UseRemunerationPercentage)
         {
             var percentage = isFirstYear ? 0.60m : 0.30m;
             baseAmount = Math.Min(employee.MonthlySalary * percentage, baseAmount);

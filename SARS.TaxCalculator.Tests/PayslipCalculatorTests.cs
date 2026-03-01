@@ -217,4 +217,106 @@ public class PayslipCalculatorTests
     {
         Assert.Throws<ArgumentNullException>(() => _calculator.CalculateBulk(null!));
     }
+
+    [Fact]
+    public void Calculate_NegativeMedicalAidMembers_ThrowsException()
+    {
+        var input = new PayslipInput
+        {
+            EmployeeId = "EMP",
+            EmployeeName = "Test",
+            Age = 30,
+            GrossSalary = 10000,
+            MedicalAidMembers = -1
+        };
+
+        var exception = Assert.Throws<ArgumentException>(() => _calculator.Calculate(input));
+        Assert.Contains("cannot be negative", exception.Message);
+    }
+
+    [Fact]
+    public void Calculate_NegativeRetirementContribution_ThrowsException()
+    {
+        var input = new PayslipInput
+        {
+            EmployeeId = "EMP",
+            EmployeeName = "Test",
+            Age = 30,
+            GrossSalary = 10000,
+            RetirementContribution = -100
+        };
+
+        var exception = Assert.Throws<ArgumentException>(() => _calculator.Calculate(input));
+        Assert.Contains("cannot be negative", exception.Message);
+    }
+
+    [Fact]
+    public void Calculate_NegativeCompanyAnnualPayroll_ThrowsException()
+    {
+        var input = new PayslipInput
+        {
+            EmployeeId = "EMP",
+            EmployeeName = "Test",
+            Age = 30,
+            GrossSalary = 10000,
+            CompanyAnnualPayroll = -500000
+        };
+
+        var exception = Assert.Throws<ArgumentException>(() => _calculator.Calculate(input));
+        Assert.Contains("cannot be negative", exception.Message);
+    }
+
+    [Fact]
+    public void Calculate_EtiWithZeroPayMonthYear_UsesDefaultConfig()
+    {
+        // PayMonth=0, PayYear=0 should fall back to default EtiConfig
+        var config2026 = TaxYearData.GetConfiguration(2026);
+        var calculator = new PayslipCalculator(config2026);
+
+        var input = new PayslipInput
+        {
+            EmployeeId = "EMP",
+            EmployeeName = "Test",
+            Age = 22,
+            GrossSalary = 3000,
+            PayMonth = 0,
+            PayYear = 0,
+            IsEtiEligible = true,
+            EmploymentMonths = 6,
+            IsFirstTimeEmployee = true
+        };
+
+        var payslip = calculator.Calculate(input);
+
+        // Should use default (NEW) ETI config - Band 2 fixed R1,500
+        Assert.NotNull(payslip.ETI);
+        Assert.Equal(1500, payslip.ETI!.Amount);
+    }
+
+    [Fact]
+    public void CalculateBulk_WithEtiEmployees_SumsTotalEti()
+    {
+        var config2026 = TaxYearData.GetConfiguration(2026);
+        var calculator = new PayslipCalculator(config2026);
+
+        var inputs = new[]
+        {
+            new PayslipInput
+            {
+                EmployeeId = "001", EmployeeName = "A", Age = 22, GrossSalary = 3000,
+                PayMonth = 5, PayYear = 2025, IsEtiEligible = true,
+                EmploymentMonths = 6, IsFirstTimeEmployee = true
+            },
+            new PayslipInput
+            {
+                EmployeeId = "002", EmployeeName = "B", Age = 35, GrossSalary = 30000,
+                PayMonth = 5, PayYear = 2025
+                // No ETI - ETI info will be null
+            }
+        };
+
+        var result = calculator.CalculateBulk(inputs);
+        Assert.Equal(2, result.Summary.TotalEmployees);
+        Assert.Equal(1500, result.Summary.TotalETI); // Only first employee has ETI
+    }
 }

@@ -8,19 +8,19 @@
     
     <!-- Package Identity -->
     <PackageId>SARS.TaxCalculator</PackageId>
-    <Version>2026.1.1</Version>
+    <Version>2027.1.1</Version>
     <Authors>Jacques Bronkhorst</Authors>
     <Company>Jacques Bronkhorst</Company>
     
     <!-- Package Description -->
     <Title>SARS Tax Calculator for South Africa</Title>
-    <Description>A comprehensive, SARS-compliant South African tax calculation library supporting PAYE, UIF, SDL, ETI and complete payslip calculations for tax years 2023-2026. Fully compliant with official SARS legislation, Fourth Schedule Income Tax Act, and Employment Tax Incentive Act requirements. Features 98.63% test coverage with 283 comprehensive tests ensuring calculation accuracy and reliability. 
+    <Description>A comprehensive, SARS-compliant South African tax calculation library supporting PAYE, UIF, SDL, ETI and complete payslip calculations for tax years 2023-2027. Fully compliant with official SARS legislation, Fourth Schedule Income Tax Act, and Employment Tax Incentive Act requirements. 2027 tax year includes full inflationary bracket adjustment per 2026 Budget Speech.
 
 DISCLAIMER: This software is provided for informational and educational purposes only. While every effort has been made to ensure accuracy and compliance with SARS regulations, the author makes no warranties or guarantees regarding the correctness, completeness, or reliability of the calculations. Users are solely responsible for verifying all calculations and ensuring compliance with current tax regulations. The author shall not be held liable for any errors, omissions, or damages arising from the use of this software. Always consult with qualified tax professionals for official tax advice.</Description>
     <PackageTags>sars;tax;payroll;south-africa;paye;uif;sdl;eti;tax-calculator;compliance;legislation;fourth-schedule;employment-tax-incentive;payslip;tested;reliable;quality</PackageTags>
-    <PackageReleaseNotes>Version 2026.1.1: Added tax year 2026 support. Full SARS compliance review and validation. Fixed ETI rounding per SARS validation rules. Added Special Economic Zone age exemptions. Enhanced documentation with official SARS citations. Achieved 98.63% test coverage with 283 comprehensive tests covering edge cases, bulk processing, and compliance validation.</PackageReleaseNotes>
+    <PackageReleaseNotes>Version 2027.1.1: Added date-aware ETI configuration for mid-year rate changes (March 2025 uses old rates, April 2025+ uses new rates). New ForPaymentDate() fluent API method. Replaced hardcoded ETI band check with UseRemunerationPercentage flag. 100% line coverage with 416 tests.</PackageReleaseNotes>
     <Copyright>This work is in the public domain</Copyright>
-    <Summary>SARS-compliant South African tax calculation library for PAYE, UIF, SDL, and ETI calculations.</Summary>
+    <Summary>SARS-compliant South African tax calculation library for PAYE, UIF, SDL, and ETI calculations (2023-2027).</Summary>
     
     <!-- Legal and Repository -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
