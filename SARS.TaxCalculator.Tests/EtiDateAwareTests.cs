@@ -154,7 +154,7 @@ public class EtiDateAwareTests
     [InlineData(4, 2025, 3000, 1500)] // April: new rates, Band 2 fixed R1,500
     [InlineData(3, 2025, 5000, 625)]  // March: old rates, Band 3 R750 - (R499 * 0.25) = R625
     [InlineData(4, 2025, 5000, 1500)] // April: new rates, Band 2 fixed R1,500
-    [InlineData(3, 2025, 6500, 250)]  // March: old rates, Band 3 R750 - (R2,000 * 0.25) = R250
+    [InlineData(3, 2025, 6500, 250)]  // March: old rates, Band 3 R750 - (R1,999 * 0.25) = R250.25 → truncated to R250
     [InlineData(4, 2025, 6500, 750)]  // April: new rates, Band 3 R1,500 - (R1,000 * 0.75) = R750
     [InlineData(3, 2025, 7000, 0)]    // March: old rates, salary exceeds R6,500 max
     [InlineData(4, 2025, 7000, 375)]  // April: new rates, Band 3 R1,500 - (R1,500 * 0.75) = R375
