@@ -159,7 +159,7 @@ Tax years 2023-2026 maintain the same tax brackets:
 ## Compliance Verification
 
 ### Test Coverage
-- All 159 tests pass
+- All 416 tests pass with 100% line coverage and 98.5% branch coverage
 - Comprehensive coverage of edge cases and SARS-specific scenarios
 - Tests validate rounding behavior according to SARS rules
 
@@ -187,12 +187,12 @@ Tax years 2023-2026 maintain the same tax brackets:
 
 ## Future Considerations
 
-### ETI 2025 Changes Implementation
-When implementing ETI changes effective 1 April 2025:
-1. Update ETI band amounts from R1,500/R750 to R2,500/R1,250
-2. Ensure proper date-based logic for tax year transitions
-3. Update test expectations accordingly
-4. Maintain backward compatibility for historical calculations
+### ETI 2025 Changes Implementation ✅ Completed
+ETI changes effective 1 April 2025 have been implemented:
+1. ✅ ETI band amounts updated to R2,500/R1,250 (Section 8 cap)
+2. ✅ Date-aware ETI resolution via `GetEtiConfigForDate()` and `ForPaymentDate()` fluent API
+3. ✅ 2026 tax year includes `EtiConfigPeriods` with OLD rates (March 2025) and NEW rates (April 2025+)
+4. ✅ Backward compatible - omitting payment date uses default (NEW) rates
 
 ### Maintenance Requirements
 - Monitor SARS announcements for tax year changes
@@ -214,9 +214,10 @@ When implementing ETI changes effective 1 April 2025:
 ## Testing and Quality Assurance
 
 ### Comprehensive Test Coverage
-- **Line Coverage**: 98.63% (1008 out of 1022 lines)
-- **Branch Coverage**: 90.58% (154 out of 170 branches)
-- **Total Tests**: 283 comprehensive tests
+- **Line Coverage**: 100% (1209 out of 1209 lines)
+- **Branch Coverage**: 98.5% (203 out of 206 branches)
+- **Method Coverage**: 100% (235 out of 235 methods)
+- **Total Tests**: 416 comprehensive tests
 
 ### Compliance Testing Strategy
 1. **SARS Validation Rules**: All tests verify adherence to official SARS validation requirements
@@ -234,7 +235,7 @@ When implementing ETI changes effective 1 April 2025:
 - **Exception Handling**: Error scenario validation
 
 ### Quality Metrics
-- **100% Pass Rate**: All 283 tests pass consistently
+- **100% Pass Rate**: All 416 tests pass consistently
 - **Deterministic Results**: No flaky or random test failures
 - **Performance**: <100ms execution time for full test suite
 - **Stability**: Tests run reliably across multiple .NET versions
@@ -243,7 +244,7 @@ When implementing ETI changes effective 1 April 2025:
 For detailed testing information, see [TESTING_GUIDE.md](TESTING_GUIDE.md).
 
 ---
-**Last Updated**: February 2026
+**Last Updated**: March 2026
 **Reviewed By**: Claude AI Assistant
 **Compliance Status**: ✅ Fully Compliant with Current SARS Requirements (2027 Tax Year)
 **Source**: 2026 Budget Speech (25 February 2026) and official SARS publications

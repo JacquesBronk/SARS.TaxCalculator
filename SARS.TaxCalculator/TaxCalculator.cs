@@ -17,7 +17,7 @@ public static class TaxCalculator
     /// <summary>
     /// Creates a tax calculation builder for the specified tax year
     /// </summary>
-    /// <param name="year">Tax year (2023, 2024, 2025, or 2026)</param>
+    /// <param name="year">Tax year (2023, 2024, 2025, 2026, or 2027)</param>
     /// <returns>Tax calculation builder</returns>
     public static TaxCalculationBuilder ForTaxYear(int year)
     {
