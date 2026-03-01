@@ -382,7 +382,9 @@ public class CalculatorEdgeCaseTests
             EndDate = new DateTime(2026, 2, 28),
             EtiConfig = new EtiConfiguration
             {
-                MinAge = 18, MaxAge = 29, MaxQualifyingSalary = 7500
+                MinAge = 18,
+                MaxAge = 29,
+                MaxQualifyingSalary = 7500
             },
             EtiConfigPeriods = new List<DatedEtiConfiguration>
             {
@@ -391,7 +393,9 @@ public class CalculatorEdgeCaseTests
                     EffectiveFrom = new DateTime(2025, 6, 1),
                     Config = new EtiConfiguration
                     {
-                        MinAge = 18, MaxAge = 29, MaxQualifyingSalary = 8000
+                        MinAge = 18,
+                        MaxAge = 29,
+                        MaxQualifyingSalary = 8000
                     }
                 }
             }
