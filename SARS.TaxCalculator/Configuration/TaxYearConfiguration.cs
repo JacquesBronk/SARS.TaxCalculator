@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SARS.TaxCalculator.Models;
 
 namespace SARS.TaxCalculator.Configuration;
@@ -61,7 +62,7 @@ public class TaxYearConfiguration
 
     /// <summary>
     /// Optional date-specific ETI configurations for mid-year rate changes.
-    /// Must be ordered by EffectiveFrom date ascending.
+    /// Periods are sorted by EffectiveFrom ascending at resolution time.
     /// </summary>
     public IReadOnlyList<DatedEtiConfiguration>? EtiConfigPeriods { get; init; }
 
@@ -77,7 +78,7 @@ public class TaxYearConfiguration
         var payDate = new DateTime(payYear, payMonth, 1);
         EtiConfiguration? applicable = null;
 
-        foreach (var period in EtiConfigPeriods)
+        foreach (var period in EtiConfigPeriods.OrderBy(p => p.EffectiveFrom))
         {
             if (payDate >= period.EffectiveFrom)
                 applicable = period.Config;

@@ -314,7 +314,7 @@ public static class TaxYearData
                 // Source: Employment Tax Incentive Act - Sections 6, 7, 8
                 // SARS ETI Guide (LAPD-ETI-G01) - Updated April 2025
                 // Band amounts represent the Section 8 legislative cap per employee per month
-                // Note: Band formulas (60%/30%) give effective max of R1,500/R750, below the S8 cap
+                // Note: Band 1 formulas (60%/30%) yield an effective maximum below the Section 8 cap for this band
                 Bands = new List<EtiBand>
                 {
                     // Band 1: R0 - R2,499.99 - 60%/30% of remuneration, capped at Section 8 max (R2,500/R1,250)
