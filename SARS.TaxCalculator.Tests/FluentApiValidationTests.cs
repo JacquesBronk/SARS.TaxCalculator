@@ -160,7 +160,7 @@ public class FluentApiValidationTests
 
     [Theory]
     [InlineData(2022)]
-    [InlineData(2027)]
+    [InlineData(2028)]
     [InlineData(1990)]
     [InlineData(2050)]
     public void ForTaxYear_UnsupportedYear_ThrowsException(int unsupportedYear)
@@ -174,6 +174,7 @@ public class FluentApiValidationTests
     [InlineData(2024)]
     [InlineData(2025)]
     [InlineData(2026)]
+    [InlineData(2027)]
     public void ForTaxYear_SupportedYear_DoesNotThrow(int supportedYear)
     {
         var exception = Record.Exception(() =>
@@ -191,7 +192,8 @@ public class FluentApiValidationTests
         Assert.Contains(2024, supportedYears);
         Assert.Contains(2025, supportedYears);
         Assert.Contains(2026, supportedYears);
-        Assert.Equal(4, supportedYears.Length);
+        Assert.Contains(2027, supportedYears);
+        Assert.Equal(5, supportedYears.Length);
     }
 
     [Fact]

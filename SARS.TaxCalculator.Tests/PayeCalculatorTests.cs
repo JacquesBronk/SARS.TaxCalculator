@@ -20,11 +20,11 @@ public class PayeCalculatorTests
     [InlineData(0, 30, 0, 0)] // No income
     [InlineData(95750, 30, 0, 0)] // At threshold
     [InlineData(100000, 30, 0, 63.75)] // Just above threshold
-    [InlineData(250000, 30, 0, 2399.73)] // First bracket
-    [InlineData(400000, 30, 0, 5772.64)] // Second bracket
-    [InlineData(600000, 30, 0, 11302.64)] // Third bracket
-    [InlineData(1000000, 30, 0, 24356.97)] // Fourth bracket
-    [InlineData(2000000, 30, 0, 59133.63)] // Fifth bracket
+    [InlineData(250000, 30, 0, 2399.75)] // Second bracket
+    [InlineData(400000, 30, 0, 5772.67)] // Third bracket
+    [InlineData(600000, 30, 0, 11302.67)] // Fourth bracket
+    [InlineData(1000000, 30, 0, 24357.00)] // Sixth bracket
+    [InlineData(2000000, 30, 0, 59133.67)] // Top bracket
     public void CalculateMonthlyPaye_VariousIncomes_ReturnsCorrectPaye(
         decimal annualIncome, int age, int medicalAidMembers, decimal expectedMonthlyPaye)
     {
@@ -61,7 +61,7 @@ public class PayeCalculatorTests
     public void CalculateTotalRebates_VariousAges_ReturnsCorrectRebates(int age, decimal expectedRebates)
     {
         var annualIncome = 500000; // High enough to ensure tax is payable
-        var grossTax = 117506.69m; // Calculated gross tax for R500,000
+        var grossTax = 117507m; // Calculated gross tax for R500,000
         var annualPaye = _calculator.CalculateAnnualPaye(annualIncome, age, 0);
         var expectedPaye = grossTax - expectedRebates;
 
@@ -156,6 +156,6 @@ public class PayeCalculatorTests
         var monthlyPaye = calculator.CalculateMonthlyPaye(50000, 35, 2);
 
         // All years have same rates
-        Assert.Equal(10574.64m, monthlyPaye, 2);
+        Assert.Equal(10574.67m, monthlyPaye, 2);
     }
 }

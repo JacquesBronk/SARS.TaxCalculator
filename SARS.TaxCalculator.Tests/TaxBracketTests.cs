@@ -32,10 +32,10 @@ public class TaxBracketTests
             Rate = 26
         };
 
-        // Income of 300,000: BaseTax + (300,000 - 237,101) * 26%
-        // 42,678 + 62,899 * 0.26 = 42,678 + 16,353.74 = 59,031.74
+        // SARS formula: BaseTax + (300,000 - 237,100) * 26%
+        // 42,678 + 62,900 * 0.26 = 42,678 + 16,354 = 59,032
         var result = bracket.CalculateTax(300000);
-        Assert.Equal(59031.74m, result);
+        Assert.Equal(59032m, result);
     }
 
     [Fact]
@@ -50,10 +50,10 @@ public class TaxBracketTests
         };
 
         // Should calculate only up to MaxIncome
-        // BaseTax + (370,500 - 237,101) * 26%
-        // 42,678 + 133,399 * 0.26 = 42,678 + 34,683.74 = 77,361.74
+        // SARS formula: BaseTax + (370,500 - 237,100) * 26%
+        // 42,678 + 133,400 * 0.26 = 42,678 + 34,684 = 77,362
         var result = bracket.CalculateTax(500000);
-        Assert.Equal(77361.74m, result);
+        Assert.Equal(77362m, result);
     }
 
     [Fact]
@@ -67,10 +67,10 @@ public class TaxBracketTests
             Rate = 45
         };
 
-        // Income of 2,000,000: BaseTax + (2,000,000 - 1,817,001) * 45%
-        // 644,489 + 182,999 * 0.45 = 644,489 + 82,349.55 = 726,838.55
+        // SARS formula: BaseTax + (2,000,000 - 1,817,000) * 45%
+        // 644,489 + 183,000 * 0.45 = 644,489 + 82,350 = 726,839
         var result = bracket.CalculateTax(2000000);
-        Assert.Equal(726838.55m, result);
+        Assert.Equal(726839m, result);
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class TaxBracketTests
     }
 
     [Fact]
-    public void CalculateTax_ExactlyAtMinimum_ReturnsBaseTax()
+    public void CalculateTax_ExactlyAtMinimum_ReturnsBaseTaxPlusOneRandAtRate()
     {
         var bracket = new TaxBracket
         {
@@ -100,8 +100,10 @@ public class TaxBracketTests
             Rate = 26
         };
 
+        // At MinIncome, SARS taxes the R1 above previous bracket's max at the new rate
+        // 42,678 + 26% of R1 = 42,678.26
         var result = bracket.CalculateTax(237101);
-        Assert.Equal(42678, result);
+        Assert.Equal(42678.26m, result);
     }
 
     [Fact]
@@ -115,8 +117,9 @@ public class TaxBracketTests
             Rate = 26
         };
 
-        // BaseTax + (370,500 - 237,101) * 26%
+        // SARS formula: BaseTax + (370,500 - 237,100) * 26% = 42,678 + 34,684 = 77,362
+        // This equals the next bracket's BaseTax, ensuring continuity
         var result = bracket.CalculateTax(370500);
-        Assert.Equal(77361.74m, result);
+        Assert.Equal(77362m, result);
     }
 }

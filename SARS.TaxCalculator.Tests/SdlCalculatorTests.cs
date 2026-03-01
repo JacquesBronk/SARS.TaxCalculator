@@ -138,4 +138,28 @@ public class SdlCalculatorTests
     {
         Assert.Throws<ArgumentNullException>(() => new SdlCalculator(null!));
     }
+
+    [Fact]
+    public void CalculateAnnual_NegativeIncome_ThrowsException()
+    {
+        var exception = Assert.Throws<ArgumentException>(() =>
+            _calculator.CalculateAnnual(-1000, 1000000));
+        Assert.Contains("cannot be negative", exception.Message);
+    }
+
+    [Fact]
+    public void CalculateAnnual_NegativePayroll_ThrowsException()
+    {
+        var exception = Assert.Throws<ArgumentException>(() =>
+            _calculator.CalculateAnnual(120000, -1000000));
+        Assert.Contains("cannot be negative", exception.Message);
+    }
+
+    [Fact]
+    public void CalculateTotalSdl_NegativePayroll_ThrowsException()
+    {
+        var exception = Assert.Throws<ArgumentException>(() =>
+            _calculator.CalculateTotalSdl(-1000));
+        Assert.Contains("cannot be negative", exception.Message);
+    }
 }

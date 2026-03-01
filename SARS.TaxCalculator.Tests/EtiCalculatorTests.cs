@@ -23,8 +23,8 @@ public class EtiCalculatorTests
             MaxQualifyingSalary = 7500,
             Bands = new List<EtiBand>
             {
-                // Band 1: R0 - R2,499.99 - 60% of remuneration (capped at R2,500/R1,250)
-                new EtiBand { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250 },
+                // Band 1: R0 - R2,499.99 - 60%/30% of remuneration, capped at Section 8 max (R2,500/R1,250)
+                new EtiBand { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250, UseRemunerationPercentage = true },
                 // Band 2: R2,500 - R5,499.99 - Fixed amounts
                 new EtiBand { MinSalary = 2500, MaxSalary = 5499.99m, FirstYearAmount = 1500, SecondYearAmount = 750 },
                 // Band 3: R5,500 - R7,499.99 - Sliding scale reduction

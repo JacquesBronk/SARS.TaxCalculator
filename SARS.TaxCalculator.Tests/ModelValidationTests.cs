@@ -140,11 +140,11 @@ public class ModelValidationTests
             Rate = 26
         };
 
-        // Exact minimum - should return base tax only
-        Assert.Equal(42678m, bracket.CalculateTax(237101));
+        // Exact minimum - SARS taxes the R1 above previous bracket's max at the new rate
+        Assert.Equal(42678.26m, bracket.CalculateTax(237101));
 
-        // Exact maximum - should return base tax + full bracket tax
-        var expectedMax = 42678m + ((370500m - 237101m) * 26m / 100m);
+        // Exact maximum - should return base tax + full bracket tax (above previous max)
+        var expectedMax = 42678m + ((370500m - 237100m) * 26m / 100m);
         Assert.Equal(expectedMax, bracket.CalculateTax(370500));
 
         // Above maximum - should be capped at bracket max
@@ -162,15 +162,15 @@ public class ModelValidationTests
             Rate = 45
         };
 
-        // Test at minimum
-        Assert.Equal(644489m, topBracket.CalculateTax(1817001));
+        // Test at minimum - SARS taxes the R1 above previous bracket's max at the new rate
+        Assert.Equal(644489.45m, topBracket.CalculateTax(1817001));
 
-        // Test well above minimum
-        var expectedHigh = 644489m + ((2000000m - 1817001m) * 45m / 100m);
+        // Test well above minimum (above previous bracket's max)
+        var expectedHigh = 644489m + ((2000000m - 1817000m) * 45m / 100m);
         Assert.Equal(expectedHigh, topBracket.CalculateTax(2000000));
 
         // Test very high income
-        var expectedVeryHigh = 644489m + ((10000000m - 1817001m) * 45m / 100m);
+        var expectedVeryHigh = 644489m + ((10000000m - 1817000m) * 45m / 100m);
         Assert.Equal(expectedVeryHigh, topBracket.CalculateTax(10000000));
     }
 

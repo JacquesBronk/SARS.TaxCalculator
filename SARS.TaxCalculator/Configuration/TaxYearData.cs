@@ -16,7 +16,8 @@ public static class TaxYearData
         [2023] = Create2023Configuration(),
         [2024] = Create2024Configuration(),
         [2025] = Create2025Configuration(),
-        [2026] = Create2026Configuration()
+        [2026] = Create2026Configuration(),
+        [2027] = Create2027Configuration()
     };
 
     /// <summary>
@@ -306,17 +307,18 @@ public static class TaxYearData
                 // ETI changes effective 1 April 2025
                 // Source: https://www.sars.gov.za/latest-news/employment-tax-incentive-eti-changes-with-effect-from-1-april-2025/
                 // Changes: MaxQualifyingSalary increased to R7,500
-                // Maximum ETI for employees working 160+ hours: R2,500
+                // Section 8 cap: R2,500 (year 1) / R1,250 (year 2) for 160+ hours worked
                 // ETI is prorated for employees working < 160 hours
                 MaxQualifyingSalary = 7500,
                 // ETI bands updated for April 2025 changes
-                // Source: Employment Tax Incentive Act - Section 7
+                // Source: Employment Tax Incentive Act - Sections 6, 7, 8
                 // SARS ETI Guide (LAPD-ETI-G01) - Updated April 2025
-                // Maximum ETI: R2,500 (first year) / R1,250 (second year) for 160+ hours worked
+                // Band amounts represent the Section 8 legislative cap per employee per month
+                // Note: Band 1 formulas (60%/30%) yield an effective maximum below the Section 8 cap for this band
                 Bands = new List<EtiBand>
                 {
-                    // Band 1: R0 - R2,499.99 - 60% of remuneration (capped at R2,500/R1,250)
-                    new() { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250 },
+                    // Band 1: R0 - R2,499.99 - 60%/30% of remuneration, capped at Section 8 max (R2,500/R1,250)
+                    new() { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250, UseRemunerationPercentage = true },
                     // Band 2: R2,500 - R5,499.99 - Fixed amounts
                     new() { MinSalary = 2500, MaxSalary = 5499.99m, FirstYearAmount = 1500, SecondYearAmount = 750 },
                     // Band 3: R5,500 - R7,499.99 - Sliding scale reduction
@@ -325,10 +327,148 @@ public static class TaxYearData
                     new() { MinSalary = 7500, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
                 }
             },
+            // Mid-year ETI rate change: March 2025 uses OLD rates, April 2025+ uses NEW rates
+            // Source: ETI changes effective 1 April 2025
+            EtiConfigPeriods = new List<DatedEtiConfiguration>
+            {
+                // Pre-April 2025: OLD ETI rates (same as 2025 tax year)
+                new()
+                {
+                    EffectiveFrom = new DateTime(2025, 3, 1),
+                    Config = new EtiConfiguration
+                    {
+                        MinAge = 18,
+                        MaxAge = 29,
+                        MaxQualifyingSalary = 6500,
+                        Bands = new List<EtiBand>
+                        {
+                            new() { MinSalary = 0, MaxSalary = 2000, FirstYearAmount = 1500, SecondYearAmount = 750 },
+                            new() { MinSalary = 2001, MaxSalary = 4500, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.5m },
+                            new() { MinSalary = 4501, MaxSalary = 6500, FirstYearAmount = 750, SecondYearAmount = 375, ReductionRate = 0.25m },
+                            new() { MinSalary = 6501, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
+                        }
+                    }
+                },
+                // April 2025+: NEW ETI rates
+                new()
+                {
+                    EffectiveFrom = new DateTime(2025, 4, 1),
+                    Config = new EtiConfiguration
+                    {
+                        MinAge = 18,
+                        MaxAge = 29,
+                        MaxQualifyingSalary = 7500,
+                        Bands = new List<EtiBand>
+                        {
+                            new() { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250, UseRemunerationPercentage = true },
+                            new() { MinSalary = 2500, MaxSalary = 5499.99m, FirstYearAmount = 1500, SecondYearAmount = 750 },
+                            new() { MinSalary = 5500, MaxSalary = 7499.99m, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.75m },
+                            new() { MinSalary = 7500, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
+                        }
+                    }
+                }
+            },
             RetirementLimits = new RetirementContributionLimits
             {
                 MaxPercentage = 0.275m,
                 AnnualCap = 350000
+            }
+        };
+    }
+
+    private static TaxYearConfiguration Create2027Configuration()
+    {
+        // 2027 tax year (1 March 2026 - 28 February 2027)
+        // Source: 2026 Budget Speech (25 February 2026) - Full inflationary adjustment (3.4%) after two years frozen
+        // Reference: https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/
+        // Budget Speech: https://www.gov.za/2026BudgetSpeech
+        // Tax brackets, rebates, thresholds, and medical aid credits all adjusted for inflation
+        // ETI continues with April 2025 changes (R2,500/R1,250 S8 cap, R7,500 threshold)
+        // SARS Tax Deduction Tables 2027: "No changes from last year" for ETI
+        // Retirement deduction annual cap increased from R350,000 to R430,000
+        return new TaxYearConfiguration
+        {
+            Year = 2027,
+            StartDate = new DateTime(2026, 3, 1),
+            EndDate = new DateTime(2027, 2, 28),
+            // Tax brackets adjusted for 3.4% inflation
+            // Source: https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/
+            TaxBrackets = new List<TaxBracket>
+            {
+                new() { MinIncome = 0, MaxIncome = 245100, BaseTax = 0, Rate = 18 },
+                new() { MinIncome = 245101, MaxIncome = 383100, BaseTax = 44118, Rate = 26 },
+                new() { MinIncome = 383101, MaxIncome = 530200, BaseTax = 79998, Rate = 31 },
+                new() { MinIncome = 530201, MaxIncome = 695800, BaseTax = 125599, Rate = 36 },
+                new() { MinIncome = 695801, MaxIncome = 887000, BaseTax = 185215, Rate = 39 },
+                new() { MinIncome = 887001, MaxIncome = 1878600, BaseTax = 259783, Rate = 41 },
+                new() { MinIncome = 1878601, MaxIncome = null, BaseTax = 666339, Rate = 45 }
+            },
+            // Rebates adjusted for inflation
+            // Source: https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/
+            TaxRebates = new List<TaxRebate>
+            {
+                new() { Type = RebateType.Primary, Amount = 17820, MinAge = null },
+                new() { Type = RebateType.Secondary, Amount = 9765, MinAge = 65 },
+                new() { Type = RebateType.Tertiary, Amount = 3249, MinAge = 75 }
+            },
+            // Thresholds derived from rebates: threshold = total applicable rebates / 18%
+            // Under 65: R17,820 / 0.18 = R99,000
+            // 65-74: (R17,820 + R9,765) / 0.18 = R153,250
+            // 75+: (R17,820 + R9,765 + R3,249) / 0.18 = R171,300
+            TaxThresholds = new List<TaxThreshold>
+            {
+                new() { MinAge = null, MaxAge = 64, Amount = 99000 },
+                new() { MinAge = 65, MaxAge = 74, Amount = 153250 },
+                new() { MinAge = 75, MaxAge = null, Amount = 171300 }
+            },
+            // Medical aid credits adjusted for inflation
+            // Source: https://www.sars.gov.za/tax-rates/medical-tax-credit-rates/
+            MedicalAidCredit = new MedicalAidCredit
+            {
+                MainMemberCredit = 376,
+                FirstDependentCredit = 376,
+                AdditionalDependentCredit = 254
+            },
+            // UIF unchanged for 2027
+            UifConfig = new UifConfiguration
+            {
+                EmployeeRate = 0.01m,
+                EmployerRate = 0.01m,
+                MonthlyCeiling = 17712
+            },
+            // SDL unchanged for 2027
+            SdlConfig = new SdlConfiguration
+            {
+                Rate = 0.01m,
+                ExemptionThreshold = 500000
+            },
+            // ETI continues with April 2025 changes (same as 2026)
+            // Source: https://www.sars.gov.za/types-of-tax/pay-as-you-earn/employment-tax-incentive-eti/
+            // SARS Tax Deduction Tables 2027: "No changes from last year" for ETI
+            EtiConfig = new EtiConfiguration
+            {
+                MinAge = 18,
+                MaxAge = 29,
+                MaxQualifyingSalary = 7500,
+                Bands = new List<EtiBand>
+                {
+                    // Band 1: R0 - R2,499.99 - 60%/30% of remuneration, capped at Section 8 max (R2,500/R1,250)
+                    new() { MinSalary = 0, MaxSalary = 2499.99m, FirstYearAmount = 2500, SecondYearAmount = 1250, UseRemunerationPercentage = true },
+                    // Band 2: R2,500 - R5,499.99 - Fixed amounts
+                    new() { MinSalary = 2500, MaxSalary = 5499.99m, FirstYearAmount = 1500, SecondYearAmount = 750 },
+                    // Band 3: R5,500 - R7,499.99 - Sliding scale reduction
+                    new() { MinSalary = 5500, MaxSalary = 7499.99m, FirstYearAmount = 1500, SecondYearAmount = 750, ReductionRate = 0.75m },
+                    // Band 4: R7,500+ - No ETI
+                    new() { MinSalary = 7500, MaxSalary = decimal.MaxValue, FirstYearAmount = 0, SecondYearAmount = 0 }
+                }
+            },
+            // Retirement deduction annual cap increased from R350,000 to R430,000
+            // Source: 2026 Budget Speech
+            // Max percentage remains 27.5%
+            RetirementLimits = new RetirementContributionLimits
+            {
+                MaxPercentage = 0.275m,
+                AnnualCap = 430000
             }
         };
     }

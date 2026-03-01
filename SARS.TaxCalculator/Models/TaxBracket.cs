@@ -37,9 +37,13 @@ public class TaxBracket
         if (taxableIncome < MinIncome)
             return 0;
 
+        // SARS formula: BaseTax + Rate% of taxable income above previous bracket's ceiling
+        // For bracket 1 (MinIncome=0): above R0 = taxableIncome
+        // For bracket 2+ (MinIncome=N): above R(N-1) = taxableIncome - (N-1)
+        var bracketFloor = MinIncome > 0 ? MinIncome - 1 : 0;
         var taxableAmountInBracket = MaxIncome.HasValue
-            ? Math.Min(taxableIncome - MinIncome, MaxIncome.Value - MinIncome)
-            : taxableIncome - MinIncome;
+            ? Math.Min(taxableIncome - bracketFloor, MaxIncome.Value - bracketFloor)
+            : taxableIncome - bracketFloor;
 
         return BaseTax + (taxableAmountInBracket * Rate / 100);
     }

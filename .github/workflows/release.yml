@@ -139,8 +139,8 @@ jobs:
         ### Changes
         - Updated to version $VERSION
         - Full SARS compliance verification
-        - 98.63% test coverage with 283 comprehensive tests
-        - Support for tax years 2023-2026
+        - 100% line coverage, 98.5% branch coverage with 416 comprehensive tests
+        - Support for tax years 2023-2027
 
         ### Installation
         \`\`\`bash

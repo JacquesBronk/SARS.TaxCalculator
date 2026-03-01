@@ -310,4 +310,101 @@ public class CalculatorEdgeCaseTests
         var result2 = calculator.CalculatePayeWithRetirement(600000, 600000, 35, 0);
         Assert.Equal(result, result2); // Same as maximum allowable since it's capped
     }
+
+    [Fact]
+    public void EtiCalculator_BandGap_ReturnsIneligibleWhenNoBandMatches()
+    {
+        // Create a config with a gap between bands (R3,000-R3,999 has no band)
+        var config = new EtiConfiguration
+        {
+            MinAge = 18,
+            MaxAge = 29,
+            MaxQualifyingSalary = 6000,
+            Bands = new List<EtiBand>
+            {
+                new EtiBand { MinSalary = 0, MaxSalary = 2999, FirstYearAmount = 1000, SecondYearAmount = 500 },
+                new EtiBand { MinSalary = 4000, MaxSalary = 6000, FirstYearAmount = 500, SecondYearAmount = 250 }
+            }
+        };
+        var calculator = new EtiCalculator(config);
+
+        var employee = new EtiEmployee
+        {
+            Age = 22,
+            MonthlySalary = 3500, // Falls in the gap
+            EmploymentMonths = 6,
+            IsFirstTimeEmployee = true
+        };
+
+        var result = calculator.CalculateMonthly(employee);
+        Assert.Equal(0, result.Amount);
+        Assert.False(result.IsEligible);
+        Assert.Contains("exceeds maximum qualifying amount", result.IneligibilityReason);
+    }
+
+    [Fact]
+    public void FluentApi_WithAnnualSalary_ThenEtiDetails_UsesMonthlyEquivalent()
+    {
+        // Tests the _isAnnual branch in WithEtiDetails
+        var result = TaxCalculator.ForTaxYear(2026)
+            .WithAnnualGrossSalary(36000) // R3,000/month
+            .WithAge(22)
+            .WithEtiDetails(6)
+            .Calculate();
+
+        // R3,000 in new rates Band 2: fixed R1,500
+        Assert.Equal(1500, result.ETI);
+    }
+
+    [Fact]
+    public void FluentApi_CalculatePaye_ReturnsCorrectThresholdAndRebates()
+    {
+        // Tests the TaxThreshold and TotalRebates in CalculatePaye()
+        var result = TaxCalculator.ForTaxYear(2026)
+            .WithGrossSalary(25000)
+            .WithAge(35)
+            .CalculatePaye();
+
+        Assert.True(result.MonthlyPAYE > 0);
+        Assert.True(result.AnnualPAYE > 0);
+        Assert.Equal(95750, result.TaxThreshold); // Under 65 threshold
+        Assert.Equal(17235, result.TotalRebates); // Primary rebate only
+    }
+
+    [Fact]
+    public void GetEtiConfigForDate_DateBeforeAllPeriods_ReturnsFallbackDefault()
+    {
+        // Create a config with periods starting later than the query date
+        var config = new TaxYearConfiguration
+        {
+            Year = 2026,
+            StartDate = new DateTime(2025, 3, 1),
+            EndDate = new DateTime(2026, 2, 28),
+            EtiConfig = new EtiConfiguration
+            {
+                MinAge = 18,
+                MaxAge = 29,
+                MaxQualifyingSalary = 7500
+            },
+            EtiConfigPeriods = new List<DatedEtiConfiguration>
+            {
+                new()
+                {
+                    EffectiveFrom = new DateTime(2025, 6, 1),
+                    Config = new EtiConfiguration
+                    {
+                        MinAge = 18,
+                        MaxAge = 29,
+                        MaxQualifyingSalary = 8000
+                    }
+                }
+            }
+        };
+
+        // Query for March 2025, before the June 2025 period starts
+        var etiConfig = config.GetEtiConfigForDate(3, 2025);
+
+        // Should fall back to default EtiConfig
+        Assert.Equal(7500, etiConfig.MaxQualifyingSalary);
+    }
 }

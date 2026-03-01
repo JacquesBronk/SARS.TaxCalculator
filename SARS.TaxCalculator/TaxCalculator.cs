@@ -17,7 +17,7 @@ public static class TaxCalculator
     /// <summary>
     /// Creates a tax calculation builder for the specified tax year
     /// </summary>
-    /// <param name="year">Tax year (2023, 2024, 2025, or 2026)</param>
+    /// <param name="year">Tax year (2023, 2024, 2025, 2026, or 2027)</param>
     /// <returns>Tax calculation builder</returns>
     public static TaxCalculationBuilder ForTaxYear(int year)
     {
@@ -46,6 +46,8 @@ public class TaxCalculationBuilder
     private decimal _retirementContributionAmount;
     private decimal _annualPayroll = 1000000; // Default above SDL threshold
     private EtiEmployee? _etiEmployee;
+    private int? _payMonth;
+    private int? _payYear;
 
     internal TaxCalculationBuilder(TaxYearConfiguration config)
     {
@@ -171,6 +173,25 @@ public class TaxCalculationBuilder
     }
 
     /// <summary>
+    /// Sets the payment date for date-aware ETI configuration resolution.
+    /// Required when the tax year spans a mid-year ETI rate change.
+    /// </summary>
+    /// <param name="month">Payment month (1-12)</param>
+    /// <param name="year">Payment year</param>
+    /// <returns>Builder instance</returns>
+    public TaxCalculationBuilder ForPaymentDate(int month, int year)
+    {
+        if (month < 1 || month > 12)
+            throw new ArgumentOutOfRangeException(nameof(month), "Month must be between 1 and 12");
+        if (year < 2000 || year > 2100)
+            throw new ArgumentOutOfRangeException(nameof(year), "Year must be between 2000 and 2100");
+
+        _payMonth = month;
+        _payYear = year;
+        return this;
+    }
+
+    /// <summary>
     /// Calculates tax based on provided parameters
     /// </summary>
     /// <returns>Complete tax calculation result</returns>
@@ -190,7 +211,10 @@ public class TaxCalculationBuilder
         var payeCalculator = new PayeCalculator(_config);
         var uifCalculator = new UifCalculator(_config.UifConfig);
         var sdlCalculator = new SdlCalculator(_config.SdlConfig);
-        var etiCalculator = new EtiCalculator(_config.EtiConfig);
+        var etiConfig = (_payMonth.HasValue && _payYear.HasValue)
+            ? _config.GetEtiConfigForDate(_payMonth.Value, _payYear.Value)
+            : _config.EtiConfig;
+        var etiCalculator = new EtiCalculator(etiConfig);
 
         // Calculate PAYE
         var annualPaye = payeCalculator.CalculatePayeWithRetirement(
